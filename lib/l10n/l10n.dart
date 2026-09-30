@@ -55,6 +55,131 @@ class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
+  /// `Some history was not saved because the Core backlog reached its limit. Missing traffic: {bytes}.`
+  String trafficHistoryIncomplete(Object bytes) {
+    return Intl.message(
+      'Some history was not saved because the Core backlog reached its limit. Missing traffic: $bytes.',
+      name: 'trafficHistoryIncomplete',
+      desc: '',
+      args: [bytes],
+    );
+  }
+
+  /// `Application traffic`
+  String get trafficHistory {
+    return Intl.message(
+      'Application traffic',
+      name: 'trafficHistory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Today`
+  String get trafficHistoryToday {
+    return Intl.message(
+      'Today',
+      name: 'trafficHistoryToday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yesterday`
+  String get trafficHistoryYesterday {
+    return Intl.message(
+      'Yesterday',
+      name: 'trafficHistoryYesterday',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last 7 days`
+  String get trafficHistoryLastSevenDays {
+    return Intl.message(
+      'Last 7 days',
+      name: 'trafficHistoryLastSevenDays',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Proxy traffic`
+  String get trafficHistoryProxy {
+    return Intl.message(
+      'Proxy traffic',
+      name: 'trafficHistoryProxy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `From`
+  String get trafficHistoryFrom {
+    return Intl.message('From', name: 'trafficHistoryFrom', desc: '', args: []);
+  }
+
+  /// `Until`
+  String get trafficHistoryUntil {
+    return Intl.message(
+      'Until',
+      name: 'trafficHistoryUntil',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Refresh traffic history`
+  String get trafficHistoryRefresh {
+    return Intl.message(
+      'Refresh traffic history',
+      name: 'trafficHistoryRefresh',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The end time must be later than the start time`
+  String get trafficHistoryInvalidRange {
+    return Intl.message(
+      'The end time must be later than the start time',
+      name: 'trafficHistoryInvalidRange',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not save traffic history. Please try again.`
+  String get trafficHistorySyncFailed {
+    return Intl.message(
+      'Could not save traffic history. Please try again.',
+      name: 'trafficHistorySyncFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not read traffic history. Please refresh.`
+  String get trafficHistoryReadFailed {
+    return Intl.message(
+      'Could not read traffic history. Please refresh.',
+      name: 'trafficHistoryReadFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recorded from this version onwards, in one-minute intervals. Only traffic handled by FlClash is counted; proxy protocol overhead may differ from subscription billing.`
+  String get trafficHistoryHint {
+    return Intl.message(
+      'Recorded from this version onwards, in one-minute intervals. Only traffic handled by FlClash is counted; proxy protocol overhead may differ from subscription billing.',
+      name: 'trafficHistoryHint',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Rule`
   String get rule {
     return Intl.message('Rule', name: 'rule', desc: '', args: []);

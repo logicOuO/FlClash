@@ -204,6 +204,9 @@ var methodHandlers = map[CoreMethod]methodHandler{
 		handleResetTraffic()
 		response.success(true)
 	}),
+	getTrafficHistoryMethod: withArguments(func(ack *trafficHistoryAck, response MethodResponse) {
+		response.success(trafficHistory.read(*ack))
+	}),
 	asyncTestDelayMethod: withArguments(func(params *TestDelayParams, response MethodResponse) {
 		safeGo(response, func() {
 			response.success(handleTestDelay(params))

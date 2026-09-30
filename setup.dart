@@ -221,7 +221,22 @@ Future<int> _package(
     stderr.write(utf8.decode(data));
   });
   final exitCode = await process.exitCode;
-  return exitCode;
+  if (exitCode != 0 || platform != 'linux') return exitCode;
+  final verification = await Process.run('python3', [
+    p.join(rootDir, 'tool', 'check_linux_abi.py'),
+    p.join(
+      rootDir,
+      'build',
+      'linux',
+      arch == 'amd64' ? 'x64' : arch,
+      'release',
+      'bundle',
+    ),
+    '--check-load',
+  ]);
+  stdout.write(verification.stdout);
+  stderr.write(verification.stderr);
+  return verification.exitCode;
 }
 
 String _detectArch() {

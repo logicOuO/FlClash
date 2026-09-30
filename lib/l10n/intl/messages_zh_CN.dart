@@ -81,9 +81,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m28(count) => "已选择 ${count} 项";
 
-  static String m29(label) => "${label}必须为URL";
+  static String m29(bytes) => "部分历史因 Core 缓存达到上限未保存，累计遗漏流量：${bytes}。";
 
-  static String m30(count) => "${count} 年前";
+  static String m30(label) => "${label}必须为URL";
+
+  static String m31(count) => "${count} 年前";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -823,6 +825,29 @@ class MessageLookup extends MessageLookupByLibrary {
     "torch": MessageLookupByLibrary.simpleMessage("手电筒"),
     "totalTraffic": MessageLookupByLibrary.simpleMessage("总流量"),
     "tproxyPort": MessageLookupByLibrary.simpleMessage("Tproxy端口"),
+    "trafficHistory": MessageLookupByLibrary.simpleMessage("应用流量统计"),
+    "trafficHistoryFrom": MessageLookupByLibrary.simpleMessage("开始时间"),
+    "trafficHistoryHint": MessageLookupByLibrary.simpleMessage(
+      "从此版本开始记录，统计精度为一分钟。只统计经过 FlClash 的流量；代理协议开销可能使统计与订阅计费不同。",
+    ),
+    "trafficHistoryIncomplete": m29,
+    "trafficHistoryInvalidRange": MessageLookupByLibrary.simpleMessage(
+      "结束时间必须晚于开始时间",
+    ),
+    "trafficHistoryLastSevenDays": MessageLookupByLibrary.simpleMessage(
+      "最近 7 天",
+    ),
+    "trafficHistoryProxy": MessageLookupByLibrary.simpleMessage("代理流量"),
+    "trafficHistoryReadFailed": MessageLookupByLibrary.simpleMessage(
+      "流量统计读取失败，请刷新重试",
+    ),
+    "trafficHistoryRefresh": MessageLookupByLibrary.simpleMessage("刷新流量统计"),
+    "trafficHistorySyncFailed": MessageLookupByLibrary.simpleMessage(
+      "流量统计保存失败，请重试",
+    ),
+    "trafficHistoryToday": MessageLookupByLibrary.simpleMessage("今天"),
+    "trafficHistoryUntil": MessageLookupByLibrary.simpleMessage("结束时间"),
+    "trafficHistoryYesterday": MessageLookupByLibrary.simpleMessage("昨天"),
     "trafficUsage": MessageLookupByLibrary.simpleMessage("流量统计"),
     "tun": MessageLookupByLibrary.simpleMessage("虚拟网卡"),
     "tunDesc": MessageLookupByLibrary.simpleMessage("仅在管理员模式生效"),
@@ -840,7 +865,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "upload": MessageLookupByLibrary.simpleMessage("上传"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlDesc": MessageLookupByLibrary.simpleMessage("通过URL获取配置文件"),
-    "urlTip": m29,
+    "urlTip": m30,
     "useHosts": MessageLookupByLibrary.simpleMessage("使用Hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("使用系统Hosts"),
     "usedTraffic": MessageLookupByLibrary.simpleMessage("已用流量"),
@@ -857,7 +882,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "vpnTip": MessageLookupByLibrary.simpleMessage("重启VPN后改变生效"),
     "webDAVConfiguration": MessageLookupByLibrary.simpleMessage("WebDAV配置"),
     "whitelistMode": MessageLookupByLibrary.simpleMessage("白名单模式"),
-    "yearsAgo": m30,
+    "yearsAgo": m31,
     "zhCN": MessageLookupByLibrary.simpleMessage("中文简体"),
   };
 }

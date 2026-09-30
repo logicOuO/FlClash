@@ -38,6 +38,21 @@ class _RecordingCoreHandler extends CoreHandlerInterface {
       CoreMethod.initClash => true as T,
       CoreMethod.getTraffic ||
       CoreMethod.getTotalTraffic => {'up': 12, 'down': 34},
+      CoreMethod.getTrafficHistory => {
+        'session': 'core-session',
+        'sequence': 2,
+        'droppedBytes': 0,
+        'records': [
+          {
+            'minute': 1800000000,
+            'process': 'browser',
+            'processPath': '/opt/browser',
+            'proxy': true,
+            'upload': 10,
+            'download': 20,
+          },
+        ],
+      },
       CoreMethod.asyncTestDelay => {
         'name': 'DIRECT',
         'url': 'https://example.com',
@@ -221,6 +236,32 @@ void main() {
     });
     expect(await handler.getMemory(), 2048);
   });
+
+  test(
+    'traffic history keeps acknowledgment and batch fields structured',
+    () async {
+      final handler = _RecordingCoreHandler();
+      final batch = await handler.getTrafficHistory(
+        session: 'core-session',
+        sequence: 1,
+      );
+      expect(handler.calls[CoreMethod.getTrafficHistory], {
+        'session': 'core-session',
+        'sequence': 1,
+      });
+      expect(batch.session, 'core-session');
+      expect(batch.sequence, 2);
+      expect(batch.records.single.processPath, '/opt/browser');
+      expect(batch.records.single.upload, 10);
+      expect(batch.records.single.proxy, isTrue);
+      await handler.getTrafficHistory(flush: true);
+      expect(handler.calls[CoreMethod.getTrafficHistory], {
+        'session': '',
+        'sequence': 0,
+        'flush': true,
+      });
+    },
+  );
 
   test('getConfig preserves structured core errors', () async {
     final handler = _FailingConfigCoreHandler();

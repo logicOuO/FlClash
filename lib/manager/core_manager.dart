@@ -9,6 +9,7 @@ import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/providers/core.dart';
 import 'package:fl_clash/providers/state.dart';
+import 'package:fl_clash/providers/traffic_history.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,6 +25,7 @@ class CoreManager extends ConsumerStatefulWidget {
 class _CoreContainerState extends ConsumerState<CoreManager>
     with CoreEventListener {
   CoreController get _core => ref.read(coreHandlerProvider);
+  TrafficHistoryRecorder? _trafficHistoryRecorder;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,11 @@ class _CoreContainerState extends ConsumerState<CoreManager>
     super.initState();
     coreEventManager.addListener(this);
     ref.read(updatingActionProvider.notifier);
+    if (system.isDesktop) {
+      final recorder = ref.read(trafficHistoryProvider);
+      recorder.start();
+      _trafficHistoryRecorder = recorder;
+    }
     // A rejected profile stays selected on purpose: silently reverting to
     // the previous one hides the error and looks like the switch was lost.
     ref.listenManual(currentProfileIdProvider, (prev, next) {
@@ -62,6 +69,7 @@ class _CoreContainerState extends ConsumerState<CoreManager>
 
   @override
   void dispose() {
+    _trafficHistoryRecorder?.stop();
     coreEventManager.removeListener(this);
     super.dispose();
   }

@@ -8,6 +8,7 @@ import 'package:drift/native.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/models/traffic_history.dart';
 import 'package:flutter/foundation.dart' show visibleForTesting;
 
 part 'converter.dart';
@@ -18,6 +19,7 @@ part 'links.dart';
 part 'profiles.dart';
 part 'rules.dart';
 part 'scripts.dart';
+part 'traffic_history.dart';
 
 @DriftDatabase(
   tables: [
@@ -27,14 +29,23 @@ part 'scripts.dart';
     ProfileRuleLinks,
     ProxyGroups,
     IconRecords,
+    TrafficHistoryBuckets,
+    TrafficHistorySessions,
   ],
-  daos: [ProfilesDao, ScriptsDao, RulesDao, ProxyGroupsDao, IconRecordsDao],
+  daos: [
+    ProfilesDao,
+    ScriptsDao,
+    RulesDao,
+    ProxyGroupsDao,
+    IconRecordsDao,
+    TrafficHistoryDao,
+  ],
 )
 class Database extends _$Database {
   Database([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   static LazyDatabase _openConnection() {
     return LazyDatabase(() async {
@@ -55,6 +66,18 @@ class Database extends _$Database {
         }
         if (from < 3) {
           await _addColumnIfMissing(m, profiles, profiles.matchTarget);
+        }
+        if (from < 4) {
+          await customStatement(
+            'CREATE TABLE IF NOT EXISTS traffic_history_buckets '
+            '(minute INTEGER NOT NULL, process TEXT NOT NULL, process_path TEXT NOT NULL, '
+            'proxy INTEGER NOT NULL, upload INTEGER NOT NULL, download INTEGER NOT NULL, '
+            'PRIMARY KEY (minute, process, process_path, proxy))',
+          );
+          await customStatement(
+            'CREATE TABLE IF NOT EXISTS traffic_history_sessions '
+            '(session TEXT NOT NULL PRIMARY KEY, sequence INTEGER NOT NULL, dropped_bytes INTEGER NOT NULL DEFAULT 0)',
+          );
         }
       },
     );

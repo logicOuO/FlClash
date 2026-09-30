@@ -92,9 +92,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m28(count) => "${count} selected";
 
-  static String m29(label) => "${label} must be a URL";
+  static String m29(bytes) =>
+      "Some history was not saved because the Core backlog reached its limit. Missing traffic: ${bytes}.";
 
-  static String m30(count) =>
+  static String m30(label) => "${label} must be a URL";
+
+  static String m31(count) =>
       "${Intl.plural(count, one: '1 year ago', other: '${count} years ago')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -551,9 +554,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "inputRuleContent": MessageLookupByLibrary.simpleMessage(
       "Enter the rule content",
     ),
-    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
-      "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
-    ),
+    "installedAppsPermissionDeniedMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "The app list permission was denied, so installed apps cannot be listed. Please grant it manually in system settings.",
+        ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "This system hides the installed app list until the permission is granted. Authorize it to configure the per-app proxy.",
     ),
@@ -1142,6 +1146,37 @@ class MessageLookup extends MessageLookupByLibrary {
     "torch": MessageLookupByLibrary.simpleMessage("Flashlight"),
     "totalTraffic": MessageLookupByLibrary.simpleMessage("Total traffic"),
     "tproxyPort": MessageLookupByLibrary.simpleMessage("TProxy port"),
+    "trafficHistory": MessageLookupByLibrary.simpleMessage(
+      "Application traffic",
+    ),
+    "trafficHistoryFrom": MessageLookupByLibrary.simpleMessage("From"),
+    "trafficHistoryHint": MessageLookupByLibrary.simpleMessage(
+      "Recorded from this version onwards, in one-minute intervals. Only traffic handled by FlClash is counted; proxy protocol overhead may differ from subscription billing.",
+    ),
+    "trafficHistoryIncomplete": m29,
+    "trafficHistoryInvalidRange": MessageLookupByLibrary.simpleMessage(
+      "The end time must be later than the start time",
+    ),
+    "trafficHistoryLastSevenDays": MessageLookupByLibrary.simpleMessage(
+      "Last 7 days",
+    ),
+    "trafficHistoryProxy": MessageLookupByLibrary.simpleMessage(
+      "Proxy traffic",
+    ),
+    "trafficHistoryReadFailed": MessageLookupByLibrary.simpleMessage(
+      "Could not read traffic history. Please refresh.",
+    ),
+    "trafficHistoryRefresh": MessageLookupByLibrary.simpleMessage(
+      "Refresh traffic history",
+    ),
+    "trafficHistorySyncFailed": MessageLookupByLibrary.simpleMessage(
+      "Could not save traffic history. Please try again.",
+    ),
+    "trafficHistoryToday": MessageLookupByLibrary.simpleMessage("Today"),
+    "trafficHistoryUntil": MessageLookupByLibrary.simpleMessage("Until"),
+    "trafficHistoryYesterday": MessageLookupByLibrary.simpleMessage(
+      "Yesterday",
+    ),
     "trafficUsage": MessageLookupByLibrary.simpleMessage("Traffic usage"),
     "tun": MessageLookupByLibrary.simpleMessage("TUN"),
     "tunDesc": MessageLookupByLibrary.simpleMessage(
@@ -1167,7 +1202,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "urlDesc": MessageLookupByLibrary.simpleMessage(
       "Obtain a profile from a URL",
     ),
-    "urlTip": m29,
+    "urlTip": m30,
     "useHosts": MessageLookupByLibrary.simpleMessage("Use hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("Use system hosts"),
     "usedTraffic": MessageLookupByLibrary.simpleMessage("Used traffic"),
@@ -1188,7 +1223,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "WebDAV configuration",
     ),
     "whitelistMode": MessageLookupByLibrary.simpleMessage("Whitelist mode"),
-    "yearsAgo": m30,
+    "yearsAgo": m31,
     "zhCN": MessageLookupByLibrary.simpleMessage("Simplified Chinese"),
   };
 }

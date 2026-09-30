@@ -92,9 +92,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m28(count) => "Выбрано: ${count}";
 
-  static String m29(label) => "Значение «${label}» должно быть URL";
+  static String m29(bytes) =>
+      "Часть истории не сохранена из-за переполнения буфера Core. Потерянный трафик: ${bytes}.";
 
-  static String m30(count) =>
+  static String m30(label) => "Значение «${label}» должно быть URL";
+
+  static String m31(count) =>
       "${Intl.plural(count, one: '${count} год назад', few: '${count} года назад', many: '${count} лет назад', other: '${count} года назад')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -565,9 +568,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "inputRuleContent": MessageLookupByLibrary.simpleMessage(
       "Введите содержимое правила",
     ),
-    "installedAppsPermissionDeniedMessage": MessageLookupByLibrary.simpleMessage(
-      "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
-    ),
+    "installedAppsPermissionDeniedMessage":
+        MessageLookupByLibrary.simpleMessage(
+          "Разрешение на список приложений отклонено, поэтому установленные приложения недоступны. Предоставьте его вручную в системных настройках.",
+        ),
     "installedAppsPermissionDesc": MessageLookupByLibrary.simpleMessage(
       "Эта система не выдаёт список установленных приложений без разрешения. Предоставьте его, чтобы настроить прокси для отдельных приложений.",
     ),
@@ -1196,6 +1200,33 @@ class MessageLookup extends MessageLookupByLibrary {
     "torch": MessageLookupByLibrary.simpleMessage("Фонарик"),
     "totalTraffic": MessageLookupByLibrary.simpleMessage("Общий трафик"),
     "tproxyPort": MessageLookupByLibrary.simpleMessage("Порт TProxy"),
+    "trafficHistory": MessageLookupByLibrary.simpleMessage("Трафик приложений"),
+    "trafficHistoryFrom": MessageLookupByLibrary.simpleMessage("Начало"),
+    "trafficHistoryHint": MessageLookupByLibrary.simpleMessage(
+      "Запись начинается с этой версии с точностью до минуты. Учитывается только трафик через FlClash; служебный трафик протокола может отличаться от учёта подписки.",
+    ),
+    "trafficHistoryIncomplete": m29,
+    "trafficHistoryInvalidRange": MessageLookupByLibrary.simpleMessage(
+      "Время окончания должно быть позже времени начала",
+    ),
+    "trafficHistoryLastSevenDays": MessageLookupByLibrary.simpleMessage(
+      "Последние 7 дней",
+    ),
+    "trafficHistoryProxy": MessageLookupByLibrary.simpleMessage(
+      "Трафик прокси",
+    ),
+    "trafficHistoryReadFailed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось прочитать статистику. Обновите страницу.",
+    ),
+    "trafficHistoryRefresh": MessageLookupByLibrary.simpleMessage(
+      "Обновить статистику трафика",
+    ),
+    "trafficHistorySyncFailed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось сохранить статистику. Повторите попытку.",
+    ),
+    "trafficHistoryToday": MessageLookupByLibrary.simpleMessage("Сегодня"),
+    "trafficHistoryUntil": MessageLookupByLibrary.simpleMessage("Окончание"),
+    "trafficHistoryYesterday": MessageLookupByLibrary.simpleMessage("Вчера"),
     "trafficUsage": MessageLookupByLibrary.simpleMessage("Статистика трафика"),
     "tun": MessageLookupByLibrary.simpleMessage("TUN"),
     "tunDesc": MessageLookupByLibrary.simpleMessage(
@@ -1219,7 +1250,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "upload": MessageLookupByLibrary.simpleMessage("Отдача"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlDesc": MessageLookupByLibrary.simpleMessage("Получить профиль по URL"),
-    "urlTip": m29,
+    "urlTip": m30,
     "useHosts": MessageLookupByLibrary.simpleMessage("Использовать hosts"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage(
       "Использовать системный hosts",
@@ -1246,7 +1277,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "whitelistMode": MessageLookupByLibrary.simpleMessage(
       "Режим белого списка",
     ),
-    "yearsAgo": m30,
+    "yearsAgo": m31,
     "zhCN": MessageLookupByLibrary.simpleMessage("Упрощённый китайский"),
   };
 }

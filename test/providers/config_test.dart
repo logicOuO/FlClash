@@ -19,6 +19,7 @@ void main() {
   group('AppSetting provider', () {
     test('default value is defaultAppSettingProps', () {
       final value = container.read(appSettingProvider);
+      expect(value.locale, 'zh_CN');
       expect(value.onlyStatisticsProxy, false);
       expect(value.autoLaunch, false);
       expect(value.closeConnections, true);

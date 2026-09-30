@@ -2,6 +2,11 @@
 cmake_minimum_required(VERSION 3.13)
 project(runner LANGUAGES CXX)
 
+add_compile_definitions(
+  GLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_64
+  GLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_64
+)
+
 # The name of the executable created for the application. Change this to change
 # the on-disk name of your application.
 set(BINARY_NAME "FlClash")
@@ -122,6 +127,8 @@ set(NATIVE_ASSETS_DIR "${PROJECT_BUILD_DIR}native_assets/linux/")
 install(DIRECTORY "${NATIVE_ASSETS_DIR}"
    DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
    COMPONENT Runtime)
+
+include(sqlite_compat.cmake)
 
 # Fully re-copy the assets directory on each build to avoid having stale files
 # from a previous install.

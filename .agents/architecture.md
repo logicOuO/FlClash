@@ -356,7 +356,7 @@ a buffer you own outright (seeding, resets, tests), never on published state.
 
 ## Database
 
-The app uses Drift/SQLite in `lib/database/`. Current schema version is 2.
+The app uses Drift/SQLite in `lib/database/`. Current schema version is 4.
 
 Tables:
 
@@ -366,6 +366,19 @@ Tables:
 - `ProfileRuleLinks` (`profile_rule_mapping`)
 - `ProxyGroups`
 - `IconRecords` (`icon_records`)
+- `TrafficHistoryBuckets` (per-minute application/path and proxy/direct totals)
+- `TrafficHistorySessions` (persisted batch cursors and dropped-byte counts)
+
+Desktop application traffic is counted at the mihomo tracker byte hooks, not by polling live connection snapshots.
+`core/traffic_history.go` retains replayable batches until Flutter acknowledges a committed SQLite transaction.
+`TrafficHistoryRecorder` polls independently of screen visibility; its final flush waits for active work and then
+requests forced attribution draining and reads to an empty batch, bounded to one second. Database totals and the receipt cursor commit together. Internal
+trackers with `pushToManager=false` must not contribute a second count. The Core backlog is bounded to 65,536 keys
+and reports dropped bytes rather than silently claiming complete history. See `.agents/traffic-history.md`.
+Missing process identities are resolved asynchronously with a ten-second byte buffer and connection-scoped cache.
+Windows checks every running WSL distribution; SYSTEM Core uses the connected named-pipe UI owner's token only for
+the fixed WSL query. Linux uses native process lookup. WSL paths retain case and include the distribution; unresolved
+records retain source socket details. Historic unknown records cannot be reassigned without original source evidence.
 
 Rule scenes distinguish global added rules, profile added rules, profile custom rules, and disabled links. Rule and proxy-group ordering use fractional indexing.
 
@@ -454,6 +467,11 @@ Shared:
 - `ThemeManager`
 
 ## Build System
+
+Linux release binaries use the Ubuntu 20.04 ABI baseline. CMake caps GLib APIs at 2.64 for the runner and plugins,
+and builds the pinned SQLite amalgamation locally to avoid the Dart dependency's newer-glibc binary.
+`tool/check_linux_abi.py` scans the entire release bundle and optionally resolves imports with the local loader;
+`setup.dart` must fail before release upload if Core, Helper, plugins or native assets exceed the ABI floor.
 
 `setup.dart` is the release build orchestrator: it writes `env.json` (`APP_ENV`), activates `flutter_distributor` from
 the `chen08209/flutter_distributor` fork pinned to a `v<version>-flclash.<n>` tag (cut a new tag there and bump

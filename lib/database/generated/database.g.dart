@@ -3445,6 +3445,701 @@ class IconRecordsCompanion extends UpdateCompanion<IconRecord> {
   }
 }
 
+class $TrafficHistoryBucketsTable extends TrafficHistoryBuckets
+    with TableInfo<$TrafficHistoryBucketsTable, TrafficHistoryBucket> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TrafficHistoryBucketsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _minuteMeta = const VerificationMeta('minute');
+  @override
+  late final GeneratedColumn<int> minute = GeneratedColumn<int>(
+    'minute',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _processMeta = const VerificationMeta(
+    'process',
+  );
+  @override
+  late final GeneratedColumn<String> process = GeneratedColumn<String>(
+    'process',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _processPathMeta = const VerificationMeta(
+    'processPath',
+  );
+  @override
+  late final GeneratedColumn<String> processPath = GeneratedColumn<String>(
+    'process_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _proxyMeta = const VerificationMeta('proxy');
+  @override
+  late final GeneratedColumn<bool> proxy = GeneratedColumn<bool>(
+    'proxy',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("proxy" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _uploadMeta = const VerificationMeta('upload');
+  @override
+  late final GeneratedColumn<int> upload = GeneratedColumn<int>(
+    'upload',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _downloadMeta = const VerificationMeta(
+    'download',
+  );
+  @override
+  late final GeneratedColumn<int> download = GeneratedColumn<int>(
+    'download',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    minute,
+    process,
+    processPath,
+    proxy,
+    upload,
+    download,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'traffic_history_buckets';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TrafficHistoryBucket> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('minute')) {
+      context.handle(
+        _minuteMeta,
+        minute.isAcceptableOrUnknown(data['minute']!, _minuteMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_minuteMeta);
+    }
+    if (data.containsKey('process')) {
+      context.handle(
+        _processMeta,
+        process.isAcceptableOrUnknown(data['process']!, _processMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_processMeta);
+    }
+    if (data.containsKey('process_path')) {
+      context.handle(
+        _processPathMeta,
+        processPath.isAcceptableOrUnknown(
+          data['process_path']!,
+          _processPathMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_processPathMeta);
+    }
+    if (data.containsKey('proxy')) {
+      context.handle(
+        _proxyMeta,
+        proxy.isAcceptableOrUnknown(data['proxy']!, _proxyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_proxyMeta);
+    }
+    if (data.containsKey('upload')) {
+      context.handle(
+        _uploadMeta,
+        upload.isAcceptableOrUnknown(data['upload']!, _uploadMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_uploadMeta);
+    }
+    if (data.containsKey('download')) {
+      context.handle(
+        _downloadMeta,
+        download.isAcceptableOrUnknown(data['download']!, _downloadMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_downloadMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {minute, process, processPath, proxy};
+  @override
+  TrafficHistoryBucket map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TrafficHistoryBucket(
+      minute: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}minute'],
+      )!,
+      process: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}process'],
+      )!,
+      processPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}process_path'],
+      )!,
+      proxy: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}proxy'],
+      )!,
+      upload: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}upload'],
+      )!,
+      download: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}download'],
+      )!,
+    );
+  }
+
+  @override
+  $TrafficHistoryBucketsTable createAlias(String alias) {
+    return $TrafficHistoryBucketsTable(attachedDatabase, alias);
+  }
+}
+
+class TrafficHistoryBucket extends DataClass
+    implements Insertable<TrafficHistoryBucket> {
+  final int minute;
+  final String process;
+  final String processPath;
+  final bool proxy;
+  final int upload;
+  final int download;
+  const TrafficHistoryBucket({
+    required this.minute,
+    required this.process,
+    required this.processPath,
+    required this.proxy,
+    required this.upload,
+    required this.download,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['minute'] = Variable<int>(minute);
+    map['process'] = Variable<String>(process);
+    map['process_path'] = Variable<String>(processPath);
+    map['proxy'] = Variable<bool>(proxy);
+    map['upload'] = Variable<int>(upload);
+    map['download'] = Variable<int>(download);
+    return map;
+  }
+
+  TrafficHistoryBucketsCompanion toCompanion(bool nullToAbsent) {
+    return TrafficHistoryBucketsCompanion(
+      minute: Value(minute),
+      process: Value(process),
+      processPath: Value(processPath),
+      proxy: Value(proxy),
+      upload: Value(upload),
+      download: Value(download),
+    );
+  }
+
+  factory TrafficHistoryBucket.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TrafficHistoryBucket(
+      minute: serializer.fromJson<int>(json['minute']),
+      process: serializer.fromJson<String>(json['process']),
+      processPath: serializer.fromJson<String>(json['processPath']),
+      proxy: serializer.fromJson<bool>(json['proxy']),
+      upload: serializer.fromJson<int>(json['upload']),
+      download: serializer.fromJson<int>(json['download']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'minute': serializer.toJson<int>(minute),
+      'process': serializer.toJson<String>(process),
+      'processPath': serializer.toJson<String>(processPath),
+      'proxy': serializer.toJson<bool>(proxy),
+      'upload': serializer.toJson<int>(upload),
+      'download': serializer.toJson<int>(download),
+    };
+  }
+
+  TrafficHistoryBucket copyWith({
+    int? minute,
+    String? process,
+    String? processPath,
+    bool? proxy,
+    int? upload,
+    int? download,
+  }) => TrafficHistoryBucket(
+    minute: minute ?? this.minute,
+    process: process ?? this.process,
+    processPath: processPath ?? this.processPath,
+    proxy: proxy ?? this.proxy,
+    upload: upload ?? this.upload,
+    download: download ?? this.download,
+  );
+  TrafficHistoryBucket copyWithCompanion(TrafficHistoryBucketsCompanion data) {
+    return TrafficHistoryBucket(
+      minute: data.minute.present ? data.minute.value : this.minute,
+      process: data.process.present ? data.process.value : this.process,
+      processPath: data.processPath.present
+          ? data.processPath.value
+          : this.processPath,
+      proxy: data.proxy.present ? data.proxy.value : this.proxy,
+      upload: data.upload.present ? data.upload.value : this.upload,
+      download: data.download.present ? data.download.value : this.download,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TrafficHistoryBucket(')
+          ..write('minute: $minute, ')
+          ..write('process: $process, ')
+          ..write('processPath: $processPath, ')
+          ..write('proxy: $proxy, ')
+          ..write('upload: $upload, ')
+          ..write('download: $download')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(minute, process, processPath, proxy, upload, download);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TrafficHistoryBucket &&
+          other.minute == this.minute &&
+          other.process == this.process &&
+          other.processPath == this.processPath &&
+          other.proxy == this.proxy &&
+          other.upload == this.upload &&
+          other.download == this.download);
+}
+
+class TrafficHistoryBucketsCompanion
+    extends UpdateCompanion<TrafficHistoryBucket> {
+  final Value<int> minute;
+  final Value<String> process;
+  final Value<String> processPath;
+  final Value<bool> proxy;
+  final Value<int> upload;
+  final Value<int> download;
+  final Value<int> rowid;
+  const TrafficHistoryBucketsCompanion({
+    this.minute = const Value.absent(),
+    this.process = const Value.absent(),
+    this.processPath = const Value.absent(),
+    this.proxy = const Value.absent(),
+    this.upload = const Value.absent(),
+    this.download = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TrafficHistoryBucketsCompanion.insert({
+    required int minute,
+    required String process,
+    required String processPath,
+    required bool proxy,
+    required int upload,
+    required int download,
+    this.rowid = const Value.absent(),
+  }) : minute = Value(minute),
+       process = Value(process),
+       processPath = Value(processPath),
+       proxy = Value(proxy),
+       upload = Value(upload),
+       download = Value(download);
+  static Insertable<TrafficHistoryBucket> custom({
+    Expression<int>? minute,
+    Expression<String>? process,
+    Expression<String>? processPath,
+    Expression<bool>? proxy,
+    Expression<int>? upload,
+    Expression<int>? download,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (minute != null) 'minute': minute,
+      if (process != null) 'process': process,
+      if (processPath != null) 'process_path': processPath,
+      if (proxy != null) 'proxy': proxy,
+      if (upload != null) 'upload': upload,
+      if (download != null) 'download': download,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TrafficHistoryBucketsCompanion copyWith({
+    Value<int>? minute,
+    Value<String>? process,
+    Value<String>? processPath,
+    Value<bool>? proxy,
+    Value<int>? upload,
+    Value<int>? download,
+    Value<int>? rowid,
+  }) {
+    return TrafficHistoryBucketsCompanion(
+      minute: minute ?? this.minute,
+      process: process ?? this.process,
+      processPath: processPath ?? this.processPath,
+      proxy: proxy ?? this.proxy,
+      upload: upload ?? this.upload,
+      download: download ?? this.download,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (minute.present) {
+      map['minute'] = Variable<int>(minute.value);
+    }
+    if (process.present) {
+      map['process'] = Variable<String>(process.value);
+    }
+    if (processPath.present) {
+      map['process_path'] = Variable<String>(processPath.value);
+    }
+    if (proxy.present) {
+      map['proxy'] = Variable<bool>(proxy.value);
+    }
+    if (upload.present) {
+      map['upload'] = Variable<int>(upload.value);
+    }
+    if (download.present) {
+      map['download'] = Variable<int>(download.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TrafficHistoryBucketsCompanion(')
+          ..write('minute: $minute, ')
+          ..write('process: $process, ')
+          ..write('processPath: $processPath, ')
+          ..write('proxy: $proxy, ')
+          ..write('upload: $upload, ')
+          ..write('download: $download, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TrafficHistorySessionsTable extends TrafficHistorySessions
+    with TableInfo<$TrafficHistorySessionsTable, TrafficHistorySession> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TrafficHistorySessionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _sessionMeta = const VerificationMeta(
+    'session',
+  );
+  @override
+  late final GeneratedColumn<String> session = GeneratedColumn<String>(
+    'session',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sequenceMeta = const VerificationMeta(
+    'sequence',
+  );
+  @override
+  late final GeneratedColumn<int> sequence = GeneratedColumn<int>(
+    'sequence',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _droppedBytesMeta = const VerificationMeta(
+    'droppedBytes',
+  );
+  @override
+  late final GeneratedColumn<int> droppedBytes = GeneratedColumn<int>(
+    'dropped_bytes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  @override
+  List<GeneratedColumn> get $columns => [session, sequence, droppedBytes];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'traffic_history_sessions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<TrafficHistorySession> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('session')) {
+      context.handle(
+        _sessionMeta,
+        session.isAcceptableOrUnknown(data['session']!, _sessionMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sessionMeta);
+    }
+    if (data.containsKey('sequence')) {
+      context.handle(
+        _sequenceMeta,
+        sequence.isAcceptableOrUnknown(data['sequence']!, _sequenceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sequenceMeta);
+    }
+    if (data.containsKey('dropped_bytes')) {
+      context.handle(
+        _droppedBytesMeta,
+        droppedBytes.isAcceptableOrUnknown(
+          data['dropped_bytes']!,
+          _droppedBytesMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {session};
+  @override
+  TrafficHistorySession map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TrafficHistorySession(
+      session: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}session'],
+      )!,
+      sequence: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}sequence'],
+      )!,
+      droppedBytes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}dropped_bytes'],
+      )!,
+    );
+  }
+
+  @override
+  $TrafficHistorySessionsTable createAlias(String alias) {
+    return $TrafficHistorySessionsTable(attachedDatabase, alias);
+  }
+}
+
+class TrafficHistorySession extends DataClass
+    implements Insertable<TrafficHistorySession> {
+  final String session;
+  final int sequence;
+  final int droppedBytes;
+  const TrafficHistorySession({
+    required this.session,
+    required this.sequence,
+    required this.droppedBytes,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['session'] = Variable<String>(session);
+    map['sequence'] = Variable<int>(sequence);
+    map['dropped_bytes'] = Variable<int>(droppedBytes);
+    return map;
+  }
+
+  TrafficHistorySessionsCompanion toCompanion(bool nullToAbsent) {
+    return TrafficHistorySessionsCompanion(
+      session: Value(session),
+      sequence: Value(sequence),
+      droppedBytes: Value(droppedBytes),
+    );
+  }
+
+  factory TrafficHistorySession.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TrafficHistorySession(
+      session: serializer.fromJson<String>(json['session']),
+      sequence: serializer.fromJson<int>(json['sequence']),
+      droppedBytes: serializer.fromJson<int>(json['droppedBytes']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'session': serializer.toJson<String>(session),
+      'sequence': serializer.toJson<int>(sequence),
+      'droppedBytes': serializer.toJson<int>(droppedBytes),
+    };
+  }
+
+  TrafficHistorySession copyWith({
+    String? session,
+    int? sequence,
+    int? droppedBytes,
+  }) => TrafficHistorySession(
+    session: session ?? this.session,
+    sequence: sequence ?? this.sequence,
+    droppedBytes: droppedBytes ?? this.droppedBytes,
+  );
+  TrafficHistorySession copyWithCompanion(
+    TrafficHistorySessionsCompanion data,
+  ) {
+    return TrafficHistorySession(
+      session: data.session.present ? data.session.value : this.session,
+      sequence: data.sequence.present ? data.sequence.value : this.sequence,
+      droppedBytes: data.droppedBytes.present
+          ? data.droppedBytes.value
+          : this.droppedBytes,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TrafficHistorySession(')
+          ..write('session: $session, ')
+          ..write('sequence: $sequence, ')
+          ..write('droppedBytes: $droppedBytes')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(session, sequence, droppedBytes);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TrafficHistorySession &&
+          other.session == this.session &&
+          other.sequence == this.sequence &&
+          other.droppedBytes == this.droppedBytes);
+}
+
+class TrafficHistorySessionsCompanion
+    extends UpdateCompanion<TrafficHistorySession> {
+  final Value<String> session;
+  final Value<int> sequence;
+  final Value<int> droppedBytes;
+  final Value<int> rowid;
+  const TrafficHistorySessionsCompanion({
+    this.session = const Value.absent(),
+    this.sequence = const Value.absent(),
+    this.droppedBytes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  TrafficHistorySessionsCompanion.insert({
+    required String session,
+    required int sequence,
+    this.droppedBytes = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : session = Value(session),
+       sequence = Value(sequence);
+  static Insertable<TrafficHistorySession> custom({
+    Expression<String>? session,
+    Expression<int>? sequence,
+    Expression<int>? droppedBytes,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (session != null) 'session': session,
+      if (sequence != null) 'sequence': sequence,
+      if (droppedBytes != null) 'dropped_bytes': droppedBytes,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  TrafficHistorySessionsCompanion copyWith({
+    Value<String>? session,
+    Value<int>? sequence,
+    Value<int>? droppedBytes,
+    Value<int>? rowid,
+  }) {
+    return TrafficHistorySessionsCompanion(
+      session: session ?? this.session,
+      sequence: sequence ?? this.sequence,
+      droppedBytes: droppedBytes ?? this.droppedBytes,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (session.present) {
+      map['session'] = Variable<String>(session.value);
+    }
+    if (sequence.present) {
+      map['sequence'] = Variable<int>(sequence.value);
+    }
+    if (droppedBytes.present) {
+      map['dropped_bytes'] = Variable<int>(droppedBytes.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TrafficHistorySessionsCompanion(')
+          ..write('session: $session, ')
+          ..write('sequence: $sequence, ')
+          ..write('droppedBytes: $droppedBytes, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(e);
   $DatabaseManager get managers => $DatabaseManager(this);
@@ -3456,6 +4151,10 @@ abstract class _$Database extends GeneratedDatabase {
   );
   late final $ProxyGroupsTable proxyGroups = $ProxyGroupsTable(this);
   late final $IconRecordsTable iconRecords = $IconRecordsTable(this);
+  late final $TrafficHistoryBucketsTable trafficHistoryBuckets =
+      $TrafficHistoryBucketsTable(this);
+  late final $TrafficHistorySessionsTable trafficHistorySessions =
+      $TrafficHistorySessionsTable(this);
   late final Index idxRuleTarget = Index(
     'idx_rule_target',
     'CREATE INDEX idx_rule_target ON rules (rule_target)',
@@ -3477,6 +4176,9 @@ abstract class _$Database extends GeneratedDatabase {
   late final RulesDao rulesDao = RulesDao(this as Database);
   late final ProxyGroupsDao proxyGroupsDao = ProxyGroupsDao(this as Database);
   late final IconRecordsDao iconRecordsDao = IconRecordsDao(this as Database);
+  late final TrafficHistoryDao trafficHistoryDao = TrafficHistoryDao(
+    this as Database,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3488,6 +4190,8 @@ abstract class _$Database extends GeneratedDatabase {
     profileRuleLinks,
     proxyGroups,
     iconRecords,
+    trafficHistoryBuckets,
+    trafficHistorySessions,
     idxRuleTarget,
     idxProfileSceneOrder,
     idxProfileNameOrder,
@@ -5832,6 +6536,429 @@ typedef $$IconRecordsTableProcessedTableManager =
       IconRecord,
       PrefetchHooks Function()
     >;
+typedef $$TrafficHistoryBucketsTableCreateCompanionBuilder =
+    TrafficHistoryBucketsCompanion Function({
+      required int minute,
+      required String process,
+      required String processPath,
+      required bool proxy,
+      required int upload,
+      required int download,
+      Value<int> rowid,
+    });
+typedef $$TrafficHistoryBucketsTableUpdateCompanionBuilder =
+    TrafficHistoryBucketsCompanion Function({
+      Value<int> minute,
+      Value<String> process,
+      Value<String> processPath,
+      Value<bool> proxy,
+      Value<int> upload,
+      Value<int> download,
+      Value<int> rowid,
+    });
+
+class $$TrafficHistoryBucketsTableFilterComposer
+    extends Composer<_$Database, $TrafficHistoryBucketsTable> {
+  $$TrafficHistoryBucketsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get minute => $composableBuilder(
+    column: $table.minute,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get process => $composableBuilder(
+    column: $table.process,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get processPath => $composableBuilder(
+    column: $table.processPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get proxy => $composableBuilder(
+    column: $table.proxy,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get upload => $composableBuilder(
+    column: $table.upload,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get download => $composableBuilder(
+    column: $table.download,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TrafficHistoryBucketsTableOrderingComposer
+    extends Composer<_$Database, $TrafficHistoryBucketsTable> {
+  $$TrafficHistoryBucketsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get minute => $composableBuilder(
+    column: $table.minute,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get process => $composableBuilder(
+    column: $table.process,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get processPath => $composableBuilder(
+    column: $table.processPath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get proxy => $composableBuilder(
+    column: $table.proxy,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get upload => $composableBuilder(
+    column: $table.upload,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get download => $composableBuilder(
+    column: $table.download,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TrafficHistoryBucketsTableAnnotationComposer
+    extends Composer<_$Database, $TrafficHistoryBucketsTable> {
+  $$TrafficHistoryBucketsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get minute =>
+      $composableBuilder(column: $table.minute, builder: (column) => column);
+
+  GeneratedColumn<String> get process =>
+      $composableBuilder(column: $table.process, builder: (column) => column);
+
+  GeneratedColumn<String> get processPath => $composableBuilder(
+    column: $table.processPath,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get proxy =>
+      $composableBuilder(column: $table.proxy, builder: (column) => column);
+
+  GeneratedColumn<int> get upload =>
+      $composableBuilder(column: $table.upload, builder: (column) => column);
+
+  GeneratedColumn<int> get download =>
+      $composableBuilder(column: $table.download, builder: (column) => column);
+}
+
+class $$TrafficHistoryBucketsTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $TrafficHistoryBucketsTable,
+          TrafficHistoryBucket,
+          $$TrafficHistoryBucketsTableFilterComposer,
+          $$TrafficHistoryBucketsTableOrderingComposer,
+          $$TrafficHistoryBucketsTableAnnotationComposer,
+          $$TrafficHistoryBucketsTableCreateCompanionBuilder,
+          $$TrafficHistoryBucketsTableUpdateCompanionBuilder,
+          (
+            TrafficHistoryBucket,
+            BaseReferences<
+              _$Database,
+              $TrafficHistoryBucketsTable,
+              TrafficHistoryBucket
+            >,
+          ),
+          TrafficHistoryBucket,
+          PrefetchHooks Function()
+        > {
+  $$TrafficHistoryBucketsTableTableManager(
+    _$Database db,
+    $TrafficHistoryBucketsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TrafficHistoryBucketsTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$TrafficHistoryBucketsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$TrafficHistoryBucketsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> minute = const Value.absent(),
+                Value<String> process = const Value.absent(),
+                Value<String> processPath = const Value.absent(),
+                Value<bool> proxy = const Value.absent(),
+                Value<int> upload = const Value.absent(),
+                Value<int> download = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TrafficHistoryBucketsCompanion(
+                minute: minute,
+                process: process,
+                processPath: processPath,
+                proxy: proxy,
+                upload: upload,
+                download: download,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required int minute,
+                required String process,
+                required String processPath,
+                required bool proxy,
+                required int upload,
+                required int download,
+                Value<int> rowid = const Value.absent(),
+              }) => TrafficHistoryBucketsCompanion.insert(
+                minute: minute,
+                process: process,
+                processPath: processPath,
+                proxy: proxy,
+                upload: upload,
+                download: download,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TrafficHistoryBucketsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $TrafficHistoryBucketsTable,
+      TrafficHistoryBucket,
+      $$TrafficHistoryBucketsTableFilterComposer,
+      $$TrafficHistoryBucketsTableOrderingComposer,
+      $$TrafficHistoryBucketsTableAnnotationComposer,
+      $$TrafficHistoryBucketsTableCreateCompanionBuilder,
+      $$TrafficHistoryBucketsTableUpdateCompanionBuilder,
+      (
+        TrafficHistoryBucket,
+        BaseReferences<
+          _$Database,
+          $TrafficHistoryBucketsTable,
+          TrafficHistoryBucket
+        >,
+      ),
+      TrafficHistoryBucket,
+      PrefetchHooks Function()
+    >;
+typedef $$TrafficHistorySessionsTableCreateCompanionBuilder =
+    TrafficHistorySessionsCompanion Function({
+      required String session,
+      required int sequence,
+      Value<int> droppedBytes,
+      Value<int> rowid,
+    });
+typedef $$TrafficHistorySessionsTableUpdateCompanionBuilder =
+    TrafficHistorySessionsCompanion Function({
+      Value<String> session,
+      Value<int> sequence,
+      Value<int> droppedBytes,
+      Value<int> rowid,
+    });
+
+class $$TrafficHistorySessionsTableFilterComposer
+    extends Composer<_$Database, $TrafficHistorySessionsTable> {
+  $$TrafficHistorySessionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get session => $composableBuilder(
+    column: $table.session,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get sequence => $composableBuilder(
+    column: $table.sequence,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get droppedBytes => $composableBuilder(
+    column: $table.droppedBytes,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$TrafficHistorySessionsTableOrderingComposer
+    extends Composer<_$Database, $TrafficHistorySessionsTable> {
+  $$TrafficHistorySessionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get session => $composableBuilder(
+    column: $table.session,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get sequence => $composableBuilder(
+    column: $table.sequence,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get droppedBytes => $composableBuilder(
+    column: $table.droppedBytes,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$TrafficHistorySessionsTableAnnotationComposer
+    extends Composer<_$Database, $TrafficHistorySessionsTable> {
+  $$TrafficHistorySessionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get session =>
+      $composableBuilder(column: $table.session, builder: (column) => column);
+
+  GeneratedColumn<int> get sequence =>
+      $composableBuilder(column: $table.sequence, builder: (column) => column);
+
+  GeneratedColumn<int> get droppedBytes => $composableBuilder(
+    column: $table.droppedBytes,
+    builder: (column) => column,
+  );
+}
+
+class $$TrafficHistorySessionsTableTableManager
+    extends
+        RootTableManager<
+          _$Database,
+          $TrafficHistorySessionsTable,
+          TrafficHistorySession,
+          $$TrafficHistorySessionsTableFilterComposer,
+          $$TrafficHistorySessionsTableOrderingComposer,
+          $$TrafficHistorySessionsTableAnnotationComposer,
+          $$TrafficHistorySessionsTableCreateCompanionBuilder,
+          $$TrafficHistorySessionsTableUpdateCompanionBuilder,
+          (
+            TrafficHistorySession,
+            BaseReferences<
+              _$Database,
+              $TrafficHistorySessionsTable,
+              TrafficHistorySession
+            >,
+          ),
+          TrafficHistorySession,
+          PrefetchHooks Function()
+        > {
+  $$TrafficHistorySessionsTableTableManager(
+    _$Database db,
+    $TrafficHistorySessionsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$TrafficHistorySessionsTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer: () =>
+              $$TrafficHistorySessionsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$TrafficHistorySessionsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> session = const Value.absent(),
+                Value<int> sequence = const Value.absent(),
+                Value<int> droppedBytes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TrafficHistorySessionsCompanion(
+                session: session,
+                sequence: sequence,
+                droppedBytes: droppedBytes,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String session,
+                required int sequence,
+                Value<int> droppedBytes = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => TrafficHistorySessionsCompanion.insert(
+                session: session,
+                sequence: sequence,
+                droppedBytes: droppedBytes,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$TrafficHistorySessionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$Database,
+      $TrafficHistorySessionsTable,
+      TrafficHistorySession,
+      $$TrafficHistorySessionsTableFilterComposer,
+      $$TrafficHistorySessionsTableOrderingComposer,
+      $$TrafficHistorySessionsTableAnnotationComposer,
+      $$TrafficHistorySessionsTableCreateCompanionBuilder,
+      $$TrafficHistorySessionsTableUpdateCompanionBuilder,
+      (
+        TrafficHistorySession,
+        BaseReferences<
+          _$Database,
+          $TrafficHistorySessionsTable,
+          TrafficHistorySession
+        >,
+      ),
+      TrafficHistorySession,
+      PrefetchHooks Function()
+    >;
 
 class $DatabaseManager {
   final _$Database _db;
@@ -5848,6 +6975,13 @@ class $DatabaseManager {
       $$ProxyGroupsTableTableManager(_db, _db.proxyGroups);
   $$IconRecordsTableTableManager get iconRecords =>
       $$IconRecordsTableTableManager(_db, _db.iconRecords);
+  $$TrafficHistoryBucketsTableTableManager get trafficHistoryBuckets =>
+      $$TrafficHistoryBucketsTableTableManager(_db, _db.trafficHistoryBuckets);
+  $$TrafficHistorySessionsTableTableManager get trafficHistorySessions =>
+      $$TrafficHistorySessionsTableTableManager(
+        _db,
+        _db.trafficHistorySessions,
+      );
 }
 
 mixin _$ProfilesDaoMixin on DatabaseAccessor<Database> {
@@ -5921,4 +7055,27 @@ class IconRecordsDaoManager {
   IconRecordsDaoManager(this._db);
   $$IconRecordsTableTableManager get iconRecords =>
       $$IconRecordsTableTableManager(_db.attachedDatabase, _db.iconRecords);
+}
+
+mixin _$TrafficHistoryDaoMixin on DatabaseAccessor<Database> {
+  $TrafficHistoryBucketsTable get trafficHistoryBuckets =>
+      attachedDatabase.trafficHistoryBuckets;
+  $TrafficHistorySessionsTable get trafficHistorySessions =>
+      attachedDatabase.trafficHistorySessions;
+  TrafficHistoryDaoManager get managers => TrafficHistoryDaoManager(this);
+}
+
+class TrafficHistoryDaoManager {
+  final _$TrafficHistoryDaoMixin _db;
+  TrafficHistoryDaoManager(this._db);
+  $$TrafficHistoryBucketsTableTableManager get trafficHistoryBuckets =>
+      $$TrafficHistoryBucketsTableTableManager(
+        _db.attachedDatabase,
+        _db.trafficHistoryBuckets,
+      );
+  $$TrafficHistorySessionsTableTableManager get trafficHistorySessions =>
+      $$TrafficHistorySessionsTableTableManager(
+        _db.attachedDatabase,
+        _db.trafficHistorySessions,
+      );
 }

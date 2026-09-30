@@ -92,11 +92,12 @@ void main() {
 
   group('AppSettingProps JSON round-trip', () {
     test('default values survive round-trip', () {
-      const props = AppSettingProps();
+      const props = defaultAppSettingProps;
       final restored = roundTrip(
         () => props.toJson(),
         AppSettingProps.fromJson,
       );
+      expect(restored.locale, 'zh_CN');
       expect(restored.onlyStatisticsProxy, false);
       expect(restored.autoLaunch, false);
       expect(restored.silentLaunch, false);

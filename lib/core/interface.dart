@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/models/models.dart';
+import 'package:fl_clash/models/traffic_history.dart';
 
 import 'desktop/model.dart';
 import 'method.dart';
@@ -56,6 +57,12 @@ mixin CoreInterface {
 
   FutureOr<Traffic> getTotalTraffic(bool onlyStatisticsProxy);
 
+  Future<TrafficHistoryBatch> getTrafficHistory({
+    String session = '',
+    int sequence = 0,
+    bool flush = false,
+  });
+
   FutureOr<int> getMemory();
 
   FutureOr<void> resetTraffic();
@@ -78,6 +85,30 @@ mixin CoreInterface {
 }
 
 abstract class CoreHandlerInterface with CoreInterface {
+  @override
+  Future<TrafficHistoryBatch> getTrafficHistory({
+    String session = '',
+    int sequence = 0,
+    bool flush = false,
+  }) async {
+    final data = await _invokeMethod<Map<String, dynamic>>(
+      method: CoreMethod.getTrafficHistory,
+      arguments: {
+        'session': session,
+        'sequence': sequence,
+        if (flush) 'flush': true,
+      },
+      timeout: const Duration(seconds: 5),
+    );
+    if (data == null) {
+      throw const CoreMethodException(
+        code: 'no_response',
+        message: 'Core did not answer getTrafficHistory',
+      );
+    }
+    return TrafficHistoryBatch.fromJson(data);
+  }
+
   Future<T?> _invokeMethod<T>({
     required CoreMethod method,
     Object? arguments,

@@ -15,6 +15,7 @@ extension PageLabelL10n on PageLabel {
       PageLabel.requests => appLocalizations.requests,
       PageLabel.resources => appLocalizations.resources,
       PageLabel.connections => appLocalizations.connections,
+      PageLabel.trafficHistory => appLocalizations.trafficHistory,
     };
   }
 
@@ -25,6 +26,7 @@ extension PageLabelL10n on PageLabel {
       PageLabel.requests => appLocalizations.requestsDesc,
       PageLabel.resources => appLocalizations.resourcesDesc,
       PageLabel.connections => appLocalizations.connectionsDesc,
+      PageLabel.trafficHistory => appLocalizations.trafficHistoryHint,
       PageLabel.dashboard ||
       PageLabel.proxies ||
       PageLabel.profiles ||

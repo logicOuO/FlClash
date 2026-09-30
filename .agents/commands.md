@@ -59,6 +59,23 @@ the hooks again.
 
 ## Flutter Development
 
+Linux release bundles use Ubuntu 20.04 as the build baseline for both supported architectures. Building with
+Ubuntu 22.04 or 24.04 libraries can introduce newer glibc requirements even with the GLib API ceiling in CMake.
+Release CI therefore builds Linux in an Ubuntu 20.04 container, and setup rejects bundles above that ABI floor:
+
+```bash
+python3 tool/check_linux_abi.py build/linux/x64/release/bundle --check-load
+python3 -m unittest discover -s test/tool -p linux_abi_test.py
+```
+
+The check covers every ELF in the bundle, including plugins, native assets, Core and Helper. Limits are glibc 2.31
+and GLIBCXX 3.4.28. Ubuntu 20.04, 22.04 and 24.04 packages share the same architecture-specific deb; a different
+CPU architecture still needs its own package. Desktop interaction acceptance remains separate from loader checks.
+
+Linux CMake builds the pinned SQLite 3.53.4 amalgamation instead of shipping the sqlite3 package's newer-glibc
+precompiled library. The archive is SHA-256 verified; update its version/hash together with the SQLite dependency.
+Keep the symbolic linker binding: GTK can load the system's older SQLite in the same process.
+
 Use the default Flutter SDK directly:
 
 ```bash

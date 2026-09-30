@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/providers/app.dart';
+import 'package:fl_clash/views/traffic_history.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/widgets.dart';
 import 'package:material_ui/material_ui.dart';
@@ -22,7 +23,11 @@ class TrafficUsage extends StatelessWidget {
             label: appLocalizations.trafficUsage,
             iconData: Icons.data_saver_off,
           ),
-          onPressed: () {},
+          onPressed: system.isDesktop
+              ? () => Navigator.of(context).push<void>(
+                  MaterialPageRoute(builder: (_) => const TrafficHistoryView()),
+                )
+              : null,
           child: Consumer(
             builder: (_, ref, _) {
               final totalTraffic = ref.watch(totalTrafficProvider);

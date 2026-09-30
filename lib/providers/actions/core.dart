@@ -93,6 +93,10 @@ class CoreAction extends _$CoreAction {
 
   Future<bool> _runRestartWorker() async {
     try {
+      if (system.isDesktop &&
+          ref.read(coreStatusProvider) == CoreStatus.connected) {
+        await ref.read(trafficHistoryProvider).flushSafely();
+      }
       ref.read(coreStatusProvider.notifier).value = CoreStatus.connecting;
       final result = await restartLifecycle();
       if (!await _applyLifecycleResult(result, statusFirst: true)) {

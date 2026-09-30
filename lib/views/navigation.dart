@@ -1,7 +1,9 @@
 import 'package:fl_clash/common/app_ports.dart';
+import 'package:fl_clash/common/system.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/views/views.dart';
+import 'package:fl_clash/views/traffic_history.dart';
 import 'package:material_ui/material_ui.dart';
 
 class Navigation implements NavigationPort {
@@ -55,6 +57,16 @@ class Navigation implements NavigationPort {
         builder: (_) =>
             const ResourcesView(key: GlobalObjectKey(PageLabel.resources)),
         modes: [NavigationItemMode.more],
+      ),
+      NavigationItem(
+        icon: const Icon(Icons.bar_chart),
+        label: PageLabel.trafficHistory,
+        builder: (_) => const TrafficHistoryView(
+          key: GlobalObjectKey(PageLabel.trafficHistory),
+        ),
+        modes: system.isDesktop
+            ? [NavigationItemMode.desktop, NavigationItemMode.more]
+            : [],
       ),
       NavigationItem(
         icon: const Icon(Icons.adb),

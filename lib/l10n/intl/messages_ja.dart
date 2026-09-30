@@ -81,9 +81,12 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m28(count) => "${count} 件選択中";
 
-  static String m29(label) => "${label}はURLである必要があります";
+  static String m29(bytes) =>
+      "Core のバッファ上限に達したため、一部の履歴を保存できませんでした。未記録の通信量: ${bytes}。";
 
-  static String m30(count) => "${count} 年前";
+  static String m30(label) => "${label}はURLである必要があります";
+
+  static String m31(count) => "${count} 年前";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -953,6 +956,29 @@ class MessageLookup extends MessageLookupByLibrary {
     "torch": MessageLookupByLibrary.simpleMessage("ライト"),
     "totalTraffic": MessageLookupByLibrary.simpleMessage("合計トラフィック"),
     "tproxyPort": MessageLookupByLibrary.simpleMessage("TProxyポート"),
+    "trafficHistory": MessageLookupByLibrary.simpleMessage("アプリ別通信量"),
+    "trafficHistoryFrom": MessageLookupByLibrary.simpleMessage("開始日時"),
+    "trafficHistoryHint": MessageLookupByLibrary.simpleMessage(
+      "このバージョン以降、1分単位で記録します。FlClash を経由する通信のみ集計し、プロトコルのオーバーヘッドにより課金額と異なる場合があります。",
+    ),
+    "trafficHistoryIncomplete": m29,
+    "trafficHistoryInvalidRange": MessageLookupByLibrary.simpleMessage(
+      "終了日時は開始日時より後にしてください",
+    ),
+    "trafficHistoryLastSevenDays": MessageLookupByLibrary.simpleMessage(
+      "過去7日間",
+    ),
+    "trafficHistoryProxy": MessageLookupByLibrary.simpleMessage("プロキシ通信量"),
+    "trafficHistoryReadFailed": MessageLookupByLibrary.simpleMessage(
+      "通信量を読み込めませんでした。更新してください。",
+    ),
+    "trafficHistoryRefresh": MessageLookupByLibrary.simpleMessage("通信量を更新"),
+    "trafficHistorySyncFailed": MessageLookupByLibrary.simpleMessage(
+      "通信量を保存できませんでした。再試行してください。",
+    ),
+    "trafficHistoryToday": MessageLookupByLibrary.simpleMessage("今日"),
+    "trafficHistoryUntil": MessageLookupByLibrary.simpleMessage("終了日時"),
+    "trafficHistoryYesterday": MessageLookupByLibrary.simpleMessage("昨日"),
     "trafficUsage": MessageLookupByLibrary.simpleMessage("トラフィック統計"),
     "tun": MessageLookupByLibrary.simpleMessage("TUN"),
     "tunDesc": MessageLookupByLibrary.simpleMessage("管理者モードでのみ有効"),
@@ -972,7 +998,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "upload": MessageLookupByLibrary.simpleMessage("アップロード"),
     "url": MessageLookupByLibrary.simpleMessage("URL"),
     "urlDesc": MessageLookupByLibrary.simpleMessage("URLからプロファイルを取得します"),
-    "urlTip": m29,
+    "urlTip": m30,
     "useHosts": MessageLookupByLibrary.simpleMessage("Hostsを使用"),
     "useSystemHosts": MessageLookupByLibrary.simpleMessage("システムのHostsを使用"),
     "usedTraffic": MessageLookupByLibrary.simpleMessage("使用済みトラフィック"),
@@ -989,7 +1015,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "vpnTip": MessageLookupByLibrary.simpleMessage("変更はVPNの再起動後に有効になります"),
     "webDAVConfiguration": MessageLookupByLibrary.simpleMessage("WebDAV設定"),
     "whitelistMode": MessageLookupByLibrary.simpleMessage("ホワイトリストモード"),
-    "yearsAgo": m30,
+    "yearsAgo": m31,
     "zhCN": MessageLookupByLibrary.simpleMessage("簡体字中国語"),
   };
 }

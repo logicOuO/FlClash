@@ -11,6 +11,10 @@ essential: false
 icon: ./assets/images/icon.png
 
 dependencies:
+  - libc6 (>= 2.31)
+  - libglib2.0-0 (>= 2.64)
+  - libgtk-3-0 (>= 3.24)
+  - libstdc++6
   - libayatana-appindicator3-1
   - libsecret-1-0
 

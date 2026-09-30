@@ -125,6 +125,10 @@ accessor — only that one function has to change.
 
 Linux:
 
+Release compatibility baseline: Ubuntu 20.04 (glibc 2.31, GLib 2.64, GTK 3.24). Linux release CI uses that
+container on both amd64 and arm64; see `.agents/commands.md` for whole-bundle ABI verification. Native development
+builds on newer distributions are allowed, but are not automatically compatible release packages.
+
 ```bash
 sudo apt-get install libayatana-appindicator3-dev
 ```

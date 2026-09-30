@@ -8,7 +8,7 @@ part 'generated/config.g.dart';
 class AppSetting extends _$AppSetting with AutoDisposeNotifierMixin {
   @override
   AppSettingProps build() {
-    return const AppSettingProps();
+    return defaultAppSettingProps;
   }
 }
 
