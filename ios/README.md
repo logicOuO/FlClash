@@ -59,9 +59,11 @@ on macOS. It runs manually or on pushes to `codex/ios-*` branches. Download the
 
 ## Acceptance still required
 
-The Windows checks cannot certify Swift/Xcode linking or iPhone VPN operation.
-Before treating this as a usable release, run the unsigned macOS workflow, then
-test a signed build for subscription import with VPN off, node selection, TCP,
+The unsigned device build passed on macOS with Xcode 26.3 on 2026-10-23:
+[GitHub Actions run](https://github.com/logicOuO/FlClash/actions/runs/39929102725).
+This validates compilation and linking, but does not certify iPhone VPN operation.
+Before treating this as a usable release, test a signed build for subscription
+import with VPN off, node selection, TCP,
 UDP, DNS, IPv6, stop/start, system Settings disconnect, host termination, locked
 screen operation, Wi-Fi/cellular transitions, and a large real subscription.
 Use Xcode's PacketTunnel logs and memory graph to diagnose extension termination.
