@@ -12,6 +12,7 @@
   "trafficHistorySyncFailed": "Could not save traffic history. Please try again.",
   "trafficHistoryReadFailed": "Could not read traffic history. Please refresh.",
   "trafficHistoryHint": "Recorded from this version onwards, in one-minute intervals. Only traffic handled by FlClash is counted; proxy protocol overhead may differ from subscription billing.",
+  "trafficHistoryAndroidHint": "On Android, enable VPN and application identification. Recording continues in the background and totals are grouped by app. Apps sharing a UID are grouped together; unidentified traffic retains its UID or connection source.",
   "rule": "Rule",
   "rules": "Rules",
   "global": "Global",

@@ -55,8 +55,7 @@ class SystemAction extends _$SystemAction {
       bootGuard.markClosed(),
       if (systemDnsCoordinator != null) systemDnsCoordinator!.shutdown(),
       if (proxy != null) proxy!.stopProxy(),
-      if (system.isDesktop &&
-          ref.read(coreStatusProvider) == CoreStatus.connected)
+      if (ref.read(coreStatusProvider) == CoreStatus.connected)
         ref.read(trafficHistoryProvider).flushSafely(),
     ]);
   }

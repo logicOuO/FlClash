@@ -1201,6 +1201,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "totalTraffic": MessageLookupByLibrary.simpleMessage("Общий трафик"),
     "tproxyPort": MessageLookupByLibrary.simpleMessage("Порт TProxy"),
     "trafficHistory": MessageLookupByLibrary.simpleMessage("Трафик приложений"),
+    "trafficHistoryAndroidHint": MessageLookupByLibrary.simpleMessage(
+      "На Android включите VPN и определение приложений. Запись продолжается в фоне, трафик суммируется по приложениям. Приложения с общим UID объединяются; для неопознанного трафика сохраняется UID или источник соединения.",
+    ),
     "trafficHistoryFrom": MessageLookupByLibrary.simpleMessage("Начало"),
     "trafficHistoryHint": MessageLookupByLibrary.simpleMessage(
       "Запись начинается с этой версии с точностью до минуты. Учитывается только трафик через FlClash; служебный трафик протокола может отличаться от учёта подписки.",

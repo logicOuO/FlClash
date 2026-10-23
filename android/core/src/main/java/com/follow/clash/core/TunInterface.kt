@@ -11,4 +11,6 @@ interface TunInterface {
     fun resolveUid(protocol: Int, source: String, target: String): Int
 
     fun resolvePackage(uid: Int): String
+
+    fun resolvePackages(uid: Int): String
 }

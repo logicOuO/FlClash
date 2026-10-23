@@ -86,6 +86,7 @@ Java_com_follow_clash_core_Core_quickSetup(JNIEnv *env, jobject thiz, jstring in
 static jmethodID m_tun_interface_protect;
 static jmethodID m_tun_interface_resolve_uid;
 static jmethodID m_tun_interface_resolve_package;
+static jmethodID m_tun_interface_resolve_packages;
 static jmethodID m_invoke_interface_result;
 
 
@@ -170,6 +171,21 @@ static void call_invoke_interface_result_impl(void *invoke_interface, const char
     }
 }
 
+static char *call_tun_interface_resolve_packages_impl(void *tun_interface, const int uid) {
+    if (tun_interface == nullptr) {
+        return strdup("");
+    }
+    ATTACH_JNI();
+    const auto packages = reinterpret_cast<jstring>(env->CallObjectMethod(
+            static_cast<jobject>(tun_interface), m_tun_interface_resolve_packages, uid));
+    jni_clear_exception(env);
+    const auto result = get_string(packages);
+    if (packages != nullptr) {
+        env->DeleteLocalRef(packages);
+    }
+    return result;
+}
+
 extern "C"
 JNIEXPORT jint JNICALL
 JNI_OnLoad(JavaVM *vm, void *) {
@@ -191,11 +207,14 @@ JNI_OnLoad(JavaVM *vm, void *) {
                                                   "(I)Ljava/lang/String;");
     m_invoke_interface_result = find_method(c_invoke_interface, "onResult",
                                             "(Ljava/lang/String;)V");
+    m_tun_interface_resolve_packages = find_method(c_tun_interface, "resolvePackages",
+                                                  "(I)Ljava/lang/String;");
 
 
     protect_func = &call_tun_interface_protect_impl;
     resolve_uid_func = &call_tun_interface_resolve_uid_impl;
     resolve_package_func = &call_tun_interface_resolve_package_impl;
+    resolve_packages_func = &call_tun_interface_resolve_packages_impl;
     result_func = &call_invoke_interface_result_impl;
     release_object_func = &release_jni_object_impl;
     free_string_func = &free_string_impl;

@@ -6,10 +6,19 @@ import 'package:fl_clash/database/database.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/providers/app.dart';
 import 'package:fl_clash/providers/core.dart';
+import 'package:fl_clash/plugins/app.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final trafficHistoryStoreProvider = Provider<TrafficHistoryDao>((ref) {
   return database.trafficHistoryDao;
+});
+
+final trafficHistoryPackagesProvider = FutureProvider<Map<String, String>>((
+  ref,
+) async {
+  if (!system.isAndroid) return {};
+  final packages = await app?.getPackages() ?? [];
+  return {for (final package in packages) package.packageName: package.label};
 });
 
 final trafficHistoryProvider = Provider<TrafficHistoryRecorder>((ref) {
@@ -17,6 +26,7 @@ final trafficHistoryProvider = Provider<TrafficHistoryRecorder>((ref) {
     core: ref.read(coreHandlerProvider),
     store: ref.read(trafficHistoryStoreProvider),
     connected: () => ref.read(coreStatusProvider) == CoreStatus.connected,
+    drainSmallBatches: system.isAndroid,
   );
   ref.onDispose(recorder.dispose);
   return recorder;
@@ -26,6 +36,7 @@ class TrafficHistoryRecorder {
   final CoreController core;
   final TrafficHistoryDao store;
   final bool Function() connected;
+  final bool drainSmallBatches;
   Timer? _timer;
   Future<void>? _operation;
   String _session = '';
@@ -36,6 +47,7 @@ class TrafficHistoryRecorder {
     required this.core,
     required this.store,
     required this.connected,
+    this.drainSmallBatches = false,
   });
 
   void start() {
@@ -81,7 +93,7 @@ class TrafficHistoryRecorder {
   }
 
   Future<void> _synchronize({required bool flush}) async {
-    for (var page = 0; page < 16; page++) {
+    for (var page = 0; page < (drainSmallBatches ? 256 : 16); page++) {
       final batch = await core.getTrafficHistory(
         session: _session,
         sequence: _sequence,
@@ -91,7 +103,9 @@ class TrafficHistoryRecorder {
       _session = batch.session;
       _sequence = batch.sequence;
       if (_disposed ||
-          (flush ? batch.records.isEmpty : batch.records.length < 256)) {
+          (flush || drainSmallBatches
+              ? batch.records.isEmpty
+              : batch.records.length < 256)) {
         return;
       }
     }

@@ -147,6 +147,19 @@ var (
 
 func installHooks() {
 	installHooksOnce.Do(func() {
+		lookupPackages := func(uid uint32) string {
+			th := activeTunHandler.Load()
+			if th == nil {
+				return ""
+			}
+			th.mu.RLock()
+			defer th.mu.RUnlock()
+			if th.callback == nil || th.listener == nil {
+				return ""
+			}
+			return resolvePackages(th.callback, int(uid))
+		}
+		trafficPackageNames.Store(&lookupPackages)
 		dialer.DefaultSocketHook = func(network, address string, conn syscall.RawConn) error {
 			if platform.ShouldBlockConnection() {
 				return errBlocked

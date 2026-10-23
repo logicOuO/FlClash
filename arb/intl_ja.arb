@@ -12,6 +12,7 @@
   "trafficHistorySyncFailed": "通信量を保存できませんでした。再試行してください。",
   "trafficHistoryReadFailed": "通信量を読み込めませんでした。更新してください。",
   "trafficHistoryHint": "このバージョン以降、1分単位で記録します。FlClash を経由する通信のみ集計し、プロトコルのオーバーヘッドにより課金額と異なる場合があります。",
+  "trafficHistoryAndroidHint": "Android では VPN とアプリ識別を有効にしてください。バックグラウンドでも記録し、アプリ別に合計します。同じ UID のアプリはまとめて表示し、識別できない通信は UID または接続元を保持します。",
   "rule": "ルール",
   "rules": "ルール",
   "global": "グローバル",

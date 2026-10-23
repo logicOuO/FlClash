@@ -44,6 +44,12 @@ func handleInitClash(params *InitParams) bool {
 	sdkVersion.Store(int32(params.Version))
 	constant.SetHomeDir(params.HomeDir)
 	initOwnership(params.HomeDir)
+	if runtime.GOOS == "android" {
+		if err := initTrafficJournal(params.HomeDir); err != nil {
+			log.Errorln("Traffic history initialization failed: %v", err)
+			return false
+		}
+	}
 	isInit.Store(true)
 	return true
 }
@@ -63,6 +69,7 @@ func handleStopListener() bool {
 	isRunning.Store(false)
 	listener.StopListener()
 	resolver.ResetConnection()
+	flushTrafficJournal()
 	return true
 }
 
@@ -91,6 +98,7 @@ func handleShutdown() bool {
 	isInit.Store(false)
 	configMu.Unlock()
 
+	flushTrafficJournal()
 	handleForceGC()
 	return true
 }
@@ -695,6 +703,9 @@ func init() {
 		})
 	}
 	statistic.DefaultRequestNotify = func(c statistic.Tracker) {
+		if runtime.GOOS == "android" {
+			prepareAndroidTrafficIdentity(c.Info())
+		}
 		sendMessage(Message{
 			Type: RequestMessage,
 			Data: c,

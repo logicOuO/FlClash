@@ -1,8 +1,13 @@
-# 应用流量统计（Windows／Linux）
+# 应用流量统计（Windows／Linux／Android）
 
 首次启动默认使用简体中文，可在设置中切换语言或选择跟随系统；升级时保留已有语言设置。
 
 Windows 和 Linux 的侧边栏提供「应用流量统计」入口，也可以点击仪表盘的流量卡片进入。
+
+Android 从「工具 → 应用流量统计」或仪表盘流量卡片进入，支持同样的时间范围与代理／直连筛选。
+开启 VPN 和应用识别后，使用连接 UID 与包名归属应用，列表显示应用名称、图标和包名身份。
+同一应用在查询时间段内累加，Android 不同用户的 UID 分开；共享 UID 的应用组合显示，不猜测具体是哪一个。
+获取不到包名时保留 UID，连 UID 也无法获取时保留来源套接字。关闭 VPN、绕过 VPN 或被访问控制排除的流量无法按应用完整统计。
 
 ## 查询方式
 
@@ -29,6 +34,11 @@ Windows Helper 启动的 SYSTEM Core 从已连接的客户端命名管道获取 
 
 后台通常每两秒将记录写入本机 SQLite 数据库。数据库事务同时保存流量和批次确认游标，重复响应不会重复累加。历史跨应用重启保留，暂无自动清理期限；旧版本未记录的流量无法补回。
 
+Android Core 每两秒先把批次写入应用私有目录的 `traffic-history.db`（bbolt 队列），不依赖 Flutter 引擎或页面存在。
+批次写入成功后才确认内存采集器；Flutter 的 SQLite 事务完成后才确认并移除队列头，进程重启仍可重放待确认批次。
+停止代理或关闭 Core 时也会刷新队列。系统强杀时最近一次落盘之后的少量内存流量仍可能丢失。
+Android 10 及以上使用系统 VPN 连接 UID 查询；较旧系统沿用 procfs 查询，能否识别取决于系统访问限制。
+
 这里统计的是连接载荷，与现有 Core 流量口径一致，不等于网卡上包含协议开销的字节数，也不保证与订阅服务的计费数完全相同。未进入 FlClash 的连接不在统计范围内；进程识别被关闭或系统无法识别来源时，会归入未知项目。
 
 正常退出和重启前会尝试保存新批次，最多等待一秒，不阻塞原有 Core 关闭流程。Core 异常退出或写入持续失败时，尚未落库的记录可能丢失。未确认缓存最多保留 65,536 个程序／分钟／路由组合；达到上限后拒绝新的组合并记录遗漏字节数，页面会显示历史不完整的提示，不把遗漏显示成完整统计。
@@ -40,7 +50,8 @@ Windows Helper 启动的 SYSTEM Core 从已连接的客户端命名管道获取 
 - 后台进程解析：`core/traffic_process*.go`；解析缓存最多 4,096 条连接，待归属聚合最多 8,192 个组合。
 - RPC：`getTrafficHistory`，参数为上一次已落库批次的 `session`／`sequence`；退出前附加 `flush: true`，排空待归属字节并继续读取至空批次。
 - 落库：`lib/database/traffic_history.dart`，数据库版本 4。
-- 后台记录：`lib/providers/traffic_history.dart`，由桌面 `CoreManager` 启动。
+- 后台记录：`lib/providers/traffic_history.dart`，由 `CoreManager` 启动。
+- Android 后台持久队列：`core/traffic_journal.go`；连接身份：`core/traffic_identity_android_common.go`。
 - 页面：`lib/views/traffic_history.dart`。
 
 本功能包含 mihomo 子模块内的功能钩子，发布时必须同时保留该子模块的修改，不能只发布父仓库的 Dart／Go 包装层。

@@ -1149,6 +1149,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "trafficHistory": MessageLookupByLibrary.simpleMessage(
       "Application traffic",
     ),
+    "trafficHistoryAndroidHint": MessageLookupByLibrary.simpleMessage(
+      "On Android, enable VPN and application identification. Recording continues in the background and totals are grouped by app. Apps sharing a UID are grouped together; unidentified traffic retains its UID or connection source.",
+    ),
     "trafficHistoryFrom": MessageLookupByLibrary.simpleMessage("From"),
     "trafficHistoryHint": MessageLookupByLibrary.simpleMessage(
       "Recorded from this version onwards, in one-minute intervals. Only traffic handled by FlClash is counted; proxy protocol overhead may differ from subscription billing.",

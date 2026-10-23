@@ -826,6 +826,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "totalTraffic": MessageLookupByLibrary.simpleMessage("总流量"),
     "tproxyPort": MessageLookupByLibrary.simpleMessage("Tproxy端口"),
     "trafficHistory": MessageLookupByLibrary.simpleMessage("应用流量统计"),
+    "trafficHistoryAndroidHint": MessageLookupByLibrary.simpleMessage(
+      "安卓需开启 VPN 并启用应用识别。后台持续记录，按应用累计；共用 UID 的应用合并显示，无法识别时保留 UID 或连接来源。",
+    ),
     "trafficHistoryFrom": MessageLookupByLibrary.simpleMessage("开始时间"),
     "trafficHistoryHint": MessageLookupByLibrary.simpleMessage(
       "从此版本开始记录，统计精度为一分钟。只统计经过 FlClash 的流量；代理协议开销可能使统计与订阅计费不同。",

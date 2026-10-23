@@ -69,9 +69,6 @@ var trafficHistory = func() *trafficHistoryCollector {
 }()
 
 func init() {
-	if runtime.GOOS == "android" {
-		return
-	}
 	statistic.DefaultTrafficNotify = func(info *statistic.TrackerInfo, upload, download int64) {
 		trafficHistory.record(info, upload, download, time.Now())
 	}
@@ -95,10 +92,10 @@ func (collector *trafficHistoryCollector) record(info *statistic.TrackerInfo, up
 	}
 	collector.mu.Lock()
 	defer collector.mu.Unlock()
-	if processPath == "" && process == "" && collector.resolver != nil {
+	if processPath == "" && process == "" {
 		source := trafficSourceFor(info)
 		key.ProcessPath = source.description()
-		if tunnel.FindProcessMode() != P.FindProcessOff {
+		if collector.resolver != nil && tunnel.FindProcessMode() != P.FindProcessOff {
 			processKey := trafficProcessKey{info.UUID.String(), source}
 			identity, pending := collector.resolver.lookup(processKey, now, true)
 			if identity.Path != "" {

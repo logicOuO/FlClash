@@ -957,6 +957,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "totalTraffic": MessageLookupByLibrary.simpleMessage("合計トラフィック"),
     "tproxyPort": MessageLookupByLibrary.simpleMessage("TProxyポート"),
     "trafficHistory": MessageLookupByLibrary.simpleMessage("アプリ別通信量"),
+    "trafficHistoryAndroidHint": MessageLookupByLibrary.simpleMessage(
+      "Android では VPN とアプリ識別を有効にしてください。バックグラウンドでも記録し、アプリ別に合計します。同じ UID のアプリはまとめて表示し、識別できない通信は UID または接続元を保持します。",
+    ),
     "trafficHistoryFrom": MessageLookupByLibrary.simpleMessage("開始日時"),
     "trafficHistoryHint": MessageLookupByLibrary.simpleMessage(
       "このバージョン以降、1分単位で記録します。FlClash を経由する通信のみ集計し、プロトコルのオーバーヘッドにより課金額と異なる場合があります。",

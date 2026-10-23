@@ -64,7 +64,7 @@ class Navigation implements NavigationPort {
         builder: (_) => const TrafficHistoryView(
           key: GlobalObjectKey(PageLabel.trafficHistory),
         ),
-        modes: system.isDesktop
+        modes: system.isDesktop || system.isAndroid
             ? [NavigationItemMode.desktop, NavigationItemMode.more]
             : [],
       ),

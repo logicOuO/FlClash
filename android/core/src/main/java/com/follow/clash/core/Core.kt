@@ -31,6 +31,7 @@ object Core {
         protect: (Int) -> Boolean,
         resolveUid: (protocol: Int, source: InetSocketAddress, target: InetSocketAddress) -> Int,
         resolvePackage: (uid: Int) -> String,
+        resolvePackages: (uid: Int) -> String,
         stack: String,
         address: String,
         dns: String,
@@ -53,6 +54,8 @@ object Core {
                 }
 
                 override fun resolvePackage(uid: Int): String = resolvePackage(uid)
+
+                override fun resolvePackages(uid: Int): String = resolvePackages(uid)
             },
             stack,
             address,

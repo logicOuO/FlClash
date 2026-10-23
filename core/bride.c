@@ -11,6 +11,7 @@ int (*protect_func)(void *tun_interface, int fd);
 int (*resolve_uid_func)(void *tun_interface, int protocol, const char *source, const char *target);
 
 char* (*resolve_package_func)(void *tun_interface, int uid);
+char* (*resolve_packages_func)(void *tun_interface, int uid);
 
 void (*result_func)(void *invoke_Interface, const char *data);
 
@@ -40,6 +41,13 @@ void release_object(void *obj) {
         return;
     }
     release_object_func(obj);
+}
+
+char* resolve_packages(void *tun_interface, int uid) {
+    if (resolve_packages_func == NULL) {
+        return NULL;
+    }
+    return resolve_packages_func(tun_interface, uid);
 }
 
 void free_string(char *data) {

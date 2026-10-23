@@ -198,6 +198,11 @@ class _TrafficHistoryViewState extends ConsumerState<TrafficHistoryView> {
             labels.trafficHistoryHint,
             style: Theme.of(context).textTheme.bodySmall,
           ),
+          if (system.isAndroid)
+            Text(
+              labels.trafficHistoryAndroidHint,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
           StreamBuilder<int>(
             stream: _droppedBytes,
             builder: (context, snapshot) => (snapshot.data ?? 0) == 0
@@ -216,16 +221,35 @@ class _TrafficHistoryViewState extends ConsumerState<TrafficHistoryView> {
     );
   }
 
-  Widget _buildRow(BuildContext context, ApplicationTraffic row) {
+  String _applicationName(
+    ApplicationTraffic row,
+    Map<String, String> packages,
+  ) {
+    if (!row.processPath.startsWith('android://')) return row.process;
+    return row.process
+        .split(',')
+        .map((name) => packages[name] ?? name)
+        .join(', ');
+  }
+
+  Widget _buildRow(
+    BuildContext context,
+    ApplicationTraffic row,
+    Map<String, String> packages,
+  ) {
     final labels = context.appLocalizations;
     final name = row.process.isNotEmpty
-        ? row.process
+        ? _applicationName(row, packages)
         : row.processPath.isNotEmpty && !row.processPath.startsWith('source://')
         ? row.processPath.split(RegExp(r'[/\\]')).last
         : labels.unknown;
     return Card(
       child: ListTile(
-        leading: const Icon(Icons.apps),
+        leading:
+            row.processPath.startsWith('android://') &&
+                !row.process.contains(',')
+            ? PackageIcon(packageName: row.process, size: 32)
+            : const Icon(Icons.apps),
         title: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
         subtitle: Tooltip(
           message: row.processPath.isEmpty ? labels.unknown : row.processPath,
@@ -244,6 +268,9 @@ class _TrafficHistoryViewState extends ConsumerState<TrafficHistoryView> {
 
   Widget _buildUsage(BuildContext context) {
     final labels = context.appLocalizations;
+    final packages =
+        ref.watch(trafficHistoryPackagesProvider).asData?.value ??
+        <String, String>{};
     return StreamBuilder<List<ApplicationTraffic>>(
       stream: _usage,
       builder: (context, snapshot) {
@@ -265,6 +292,10 @@ class _TrafficHistoryViewState extends ConsumerState<TrafficHistoryView> {
             .where(
               (row) =>
                   row.process.toLowerCase().contains(_query) ||
+                  _applicationName(
+                    row,
+                    packages,
+                  ).toLowerCase().contains(_query) ||
                   row.processPath.toLowerCase().contains(_query),
             )
             .toList();
@@ -295,7 +326,7 @@ class _TrafficHistoryViewState extends ConsumerState<TrafficHistoryView> {
                 sliver: SliverList.builder(
                   itemCount: rows.length,
                   itemBuilder: (context, index) =>
-                      _buildRow(context, rows[index]),
+                      _buildRow(context, rows[index], packages),
                 ),
               ),
           ],

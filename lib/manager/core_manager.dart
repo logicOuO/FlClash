@@ -37,7 +37,7 @@ class _CoreContainerState extends ConsumerState<CoreManager>
     super.initState();
     coreEventManager.addListener(this);
     ref.read(updatingActionProvider.notifier);
-    if (system.isDesktop) {
+    if (system.isDesktop || system.isAndroid) {
       final recorder = ref.read(trafficHistoryProvider);
       recorder.start();
       _trafficHistoryRecorder = recorder;

@@ -370,6 +370,9 @@ Tables:
 - `TrafficHistorySessions` (persisted batch cursors and dropped-byte counts)
 
 Desktop application traffic is counted at the mihomo tracker byte hooks, not by polling live connection snapshots.
+Android uses the same hooks and resolves package/UID identities when trackers are created. Its Core-owned bbolt
+queue in `core/traffic_journal.go` persists batches every two seconds even without a Flutter engine; batches are removed
+only after the Flutter SQLite receipt is acknowledged. New Core sessions keep separate batch identities across restart.
 `core/traffic_history.go` retains replayable batches until Flutter acknowledges a committed SQLite transaction.
 `TrafficHistoryRecorder` polls independently of screen visibility; its final flush waits for active work and then
 requests forced attribution draining and reads to an empty batch, bounded to one second. Database totals and the receipt cursor commit together. Internal

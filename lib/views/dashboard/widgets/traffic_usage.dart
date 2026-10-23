@@ -23,7 +23,7 @@ class TrafficUsage extends StatelessWidget {
             label: appLocalizations.trafficUsage,
             iconData: Icons.data_saver_off,
           ),
-          onPressed: system.isDesktop
+          onPressed: system.isDesktop || system.isAndroid
               ? () => Navigator.of(context).push<void>(
                   MaterialPageRoute(builder: (_) => const TrafficHistoryView()),
                 )

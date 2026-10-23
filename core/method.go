@@ -205,7 +205,12 @@ var methodHandlers = map[CoreMethod]methodHandler{
 		response.success(true)
 	}),
 	getTrafficHistoryMethod: withArguments(func(ack *trafficHistoryAck, response MethodResponse) {
-		response.success(trafficHistory.read(*ack))
+		batch, err := readTrafficHistory(*ack)
+		if err != nil {
+			response.failure("traffic_history_failed", err.Error(), nil)
+			return
+		}
+		response.success(batch)
 	}),
 	asyncTestDelayMethod: withArguments(func(params *TestDelayParams, response MethodResponse) {
 		safeGo(response, func() {

@@ -180,6 +180,16 @@ class AppLocalizations {
     );
   }
 
+  /// `On Android, enable VPN and application identification. Recording continues in the background and totals are grouped by app. Apps sharing a UID are grouped together; unidentified traffic retains its UID or connection source.`
+  String get trafficHistoryAndroidHint {
+    return Intl.message(
+      'On Android, enable VPN and application identification. Recording continues in the background and totals are grouped by app. Apps sharing a UID are grouped together; unidentified traffic retains its UID or connection source.',
+      name: 'trafficHistoryAndroidHint',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Rule`
   String get rule {
     return Intl.message('Rule', name: 'rule', desc: '', args: []);

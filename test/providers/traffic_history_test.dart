@@ -68,6 +68,56 @@ void main() {
     expect(acknowledgments, [0, 0, 1]);
   });
 
+  test(
+    'Android drains queued small batches without waiting for timer ticks',
+    () async {
+      recorder.dispose();
+      recorder = TrafficHistoryRecorder(
+        core: CoreController.scoped(handler),
+        store: database.trafficHistoryDao,
+        connected: () => true,
+        drainSmallBatches: true,
+      );
+      var reads = 0;
+      when(
+        () => handler.getTrafficHistory(
+          session: any(named: 'session'),
+          sequence: any(named: 'sequence'),
+          flush: any(named: 'flush'),
+        ),
+      ).thenAnswer((invocation) async {
+        reads++;
+        expect(invocation.namedArguments[#sequence], reads - 1);
+        return TrafficHistoryBatch(
+          session: 'android-core',
+          sequence: reads,
+          records: reads > 100
+              ? []
+              : const [
+                  TrafficHistoryRecord(
+                    minute: 1800000000,
+                    process: 'com.example.app',
+                    processPath: 'android://10001/com.example.app',
+                    proxy: true,
+                    upload: 1,
+                    download: 2,
+                  ),
+                ],
+        );
+      });
+      await recorder.synchronize();
+      expect(reads, 101);
+      final rows = await database.trafficHistoryDao
+          .watchUsage(
+            start: DateTime.fromMillisecondsSinceEpoch(1800000000000),
+            end: DateTime.fromMillisecondsSinceEpoch(1800000060000),
+          )
+          .first;
+      expect(rows.single.upload, 100);
+      expect(rows.single.download, 200);
+    },
+  );
+
   test('overlapping synchronization shares one operation', () async {
     final gate = Completer<TrafficHistoryBatch>();
     when(

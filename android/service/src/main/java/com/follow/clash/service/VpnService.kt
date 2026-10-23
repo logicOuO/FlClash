@@ -20,7 +20,6 @@ import com.follow.clash.service.models.getIpv6RouteAddress
 import com.follow.clash.service.models.toCIDR
 import com.follow.clash.service.modules.ServiceModules
 import java.net.InetSocketAddress
-import java.util.concurrent.ConcurrentHashMap
 import android.net.VpnService as SystemVpnService
 
 class VpnService : SystemVpnService(), ManagedService {
@@ -40,7 +39,6 @@ class VpnService : SystemVpnService(), ManagedService {
     private val connectivity by lazy {
         getSystemService<ConnectivityManager>()
     }
-    private val uidPackageNameMap = ConcurrentHashMap<Int, String>()
 
     private fun resolveUid(
         protocol: Int,
@@ -50,18 +48,25 @@ class VpnService : SystemVpnService(), ManagedService {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             return -1
         }
-        return connectivity?.getConnectionOwnerUid(protocol, source, target) ?: -1
+        return runCatching {
+            connectivity?.getConnectionOwnerUid(protocol, source, target) ?: -1
+        }.getOrDefault(-1)
     }
 
     private fun resolvePackage(uid: Int): String {
-        val cached = uidPackageNameMap[uid]
-        if (cached != null) return cached
-        val packageName = packageManager
+        return packageManager
             .getPackagesForUid(uid)
             ?.firstOrNull()
-            ?.takeIf { it.isNotEmpty() }
             .orEmpty()
-        return uidPackageNameMap.putIfAbsent(uid, packageName) ?: packageName
+    }
+
+    private fun resolvePackages(uid: Int): String {
+        return packageManager
+            .getPackagesForUid(uid)
+            ?.filter { it.isNotEmpty() }
+            ?.sorted()
+            ?.joinToString(",")
+            .orEmpty()
     }
 
     private val VpnOptions.tunAddress
@@ -157,6 +162,7 @@ class VpnService : SystemVpnService(), ManagedService {
                         protect = this::protect,
                         resolveUid = this::resolveUid,
                         resolvePackage = this::resolvePackage,
+                        resolvePackages = this::resolvePackages,
                         stack = options.stack,
                         address = options.tunAddress,
                         dns = options.tunDns,

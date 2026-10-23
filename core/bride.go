@@ -22,6 +22,10 @@ func resolvePackage(callback unsafe.Pointer, uid int) string {
 	return takeCString(C.resolve_package(callback, C.int(uid)))
 }
 
+func resolvePackages(callback unsafe.Pointer, uid int) string {
+	return takeCString(C.resolve_packages(callback, C.int(uid)))
+}
+
 func invokeResult(callback unsafe.Pointer, data string) {
 	s := C.CString(data)
 	defer C.free(unsafe.Pointer(s))

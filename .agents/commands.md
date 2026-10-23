@@ -17,6 +17,11 @@ dart setup.dart windows
 dart setup.dart android
 ```
 
+For an Android ARM64 APK, use `dart setup.dart android --arch arm64 --targets apk` with JDK 17 and the SDK/NDK
+versions in `android/gradle/libs.versions.toml`. The APK includes the traffic-history Core and Android JNI bridge;
+keep both native build hooks enabled. Without a configured release keystore, the existing Gradle fallback signs a
+release-mode APK with the local debug key and uses `com.follow.clash.dev`, allowing installation alongside the official app.
+
 The Go core and the Rust helper build automatically: Flutter runs
 `plugins/setup/hook/build.dart` on every `flutter build` and `flutter test`,
 and the hook drives `CoreBuilder` from the `setup_hooks` package in

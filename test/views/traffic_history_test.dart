@@ -31,6 +31,7 @@ void main() {
     DateTime Function()? now,
     Size size = const Size(1100, 850),
     Locale locale = const Locale('en'),
+    Map<String, String> packages = const {},
   }) async {
     tester.view.physicalSize = size;
     tester.view.devicePixelRatio = 1;
@@ -42,6 +43,7 @@ void main() {
         overrides: [
           trafficHistoryStoreProvider.overrideWithValue(store),
           trafficHistoryProvider.overrideWithValue(recorder),
+          trafficHistoryPackagesProvider.overrideWith((ref) async => packages),
         ],
         child: TrafficHistoryView(now: now),
       ),
@@ -49,6 +51,52 @@ void main() {
     await tester.pumpAndSettle();
     addTearDown(() => tester.pumpWidget(const SizedBox.shrink()));
   }
+
+  testWidgets('Android app labels are searchable on a phone layout', (
+    tester,
+  ) async {
+    when(
+      () => store.watchUsage(
+        start: any(named: 'start'),
+        end: any(named: 'end'),
+        proxy: any(named: 'proxy'),
+      ),
+    ).thenAnswer(
+      (_) => Stream.value(const [
+        ApplicationTraffic(
+          process: 'com.example.browser',
+          processPath: 'android://10001/com.example.browser',
+          upload: 100,
+          download: 200,
+        ),
+        ApplicationTraffic(
+          process: 'com.example.other',
+          processPath: 'android://10002/com.example.other',
+          upload: 10,
+          download: 20,
+        ),
+      ]),
+    );
+    await mount(
+      tester,
+      size: const Size(390, 844),
+      packages: {
+        'com.example.browser': 'My Browser',
+        'com.example.other': 'Other App',
+      },
+    );
+    await tester.enterText(find.byType(TextField), 'My Browser');
+    await tester.pumpAndSettle();
+    final applicationRow = find.widgetWithText(ListTile, 'My Browser');
+    await tester.scrollUntilVisible(
+      applicationRow,
+      150,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(applicationRow, findsOneWidget);
+    expect(find.text('Other App'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets('shows application totals, searches paths and switches routing', (
     tester,
