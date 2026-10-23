@@ -1,5 +1,6 @@
 import 'package:fl_clash/application.dart';
 import 'package:fl_clash/manager/hotkey_manager.dart';
+import 'package:fl_clash/manager/ios_manager.dart';
 import 'package:fl_clash/manager/manager.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -17,6 +18,7 @@ Widget? _childOf(Widget widget) {
     HotKeyManager(:final child) => child,
     ProxyManager(:final child) => child,
     AndroidManager(:final child) => child,
+    IOSManager(:final child) => child,
     TileManager(:final child) => child,
     AppStateManager(:final child) => child,
     CoreManager(:final child) => child,
@@ -56,6 +58,25 @@ Widget _stack({required bool isDesktop}) {
 }
 
 void main() {
+  test('iOS owns the mobile service without Android or desktop managers', () {
+    final stack = buildManagerStack(
+      isDesktop: false,
+      isIOS: true,
+      onConnectivityChanged: (_) async {},
+      child: _leaf,
+    );
+    expect(_chainFrom(stack), [
+      AppEnvManager,
+      LocaleManager,
+      StatusManager,
+      ThemeManager,
+      IOSManager,
+      AppStateManager,
+      CoreManager,
+      ConnectivityManager,
+    ]);
+    expect(_innermostChildOf(stack), same(_leaf));
+  });
   test('the desktop manager stack nests in ownership order', () {
     expect(_chainFrom(_stack(isDesktop: true)), [
       AppEnvManager,

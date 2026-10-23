@@ -8,6 +8,7 @@ import 'package:fl_clash/bootstrap.dart';
 import 'package:fl_clash/common/system_dns.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/manager/hotkey_manager.dart';
+import 'package:fl_clash/manager/ios_manager.dart';
 import 'package:fl_clash/manager/manager.dart';
 import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -20,12 +21,15 @@ import 'pages/pages.dart';
 
 Widget buildManagerStack({
   required bool isDesktop,
+  bool isIOS = false,
   required Future<void> Function(List<ConnectivityResult> results)
   onConnectivityChanged,
   required Widget child,
 }) {
   final platformApp = isDesktop
       ? WindowHeaderContainer(child: child)
+      : isIOS
+      ? child
       : VpnManager(child: child);
   final state = AppStateManager(
     child: CoreManager(
@@ -41,6 +45,8 @@ Widget buildManagerStack({
             child: HotKeyManager(child: ProxyManager(child: state)),
           ),
         )
+      : isIOS
+      ? IOSManager(child: state)
       : AndroidManager(child: TileManager(child: state));
   return AppEnvManager(
     child: LocaleManager(
@@ -166,6 +172,7 @@ class ApplicationState extends ConsumerState<Application> {
                 data: Theme.of(context).iconTheme,
                 child: buildManagerStack(
                   isDesktop: system.isDesktop,
+                  isIOS: system.isIOS,
                   onConnectivityChanged: _handleConnectivityChanged,
                   child: child!,
                 ),

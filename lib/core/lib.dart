@@ -112,6 +112,7 @@ class CoreLib extends CoreHandlerInterface {
 
   @override
   Future<bool> startListener() async {
+    if (system.isIOS) return await _service?.start() ?? false;
     final listenerStarted = await super.startListener();
     final serviceStarted = await _service?.start() ?? false;
     return listenerStarted && serviceStarted;
@@ -119,6 +120,7 @@ class CoreLib extends CoreHandlerInterface {
 
   @override
   Future<bool> stopListener() async {
+    if (system.isIOS) return await _service?.stop() ?? false;
     final serviceStopped = await _service?.stop() ?? false;
     final listenerStopped = await super.stopListener();
     return serviceStopped && listenerStopped;
@@ -160,4 +162,4 @@ class CoreLib extends CoreHandlerInterface {
   }
 }
 
-CoreLib? get coreLib => system.isAndroid ? CoreLib() : null;
+CoreLib? get coreLib => system.isMobile ? CoreLib() : null;

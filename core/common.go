@@ -20,6 +20,7 @@ import (
 	"github.com/metacubex/mihomo/adapter/provider"
 	"github.com/metacubex/mihomo/component/auth"
 	"github.com/metacubex/mihomo/component/dialer"
+	"github.com/metacubex/mihomo/component/process"
 	"github.com/metacubex/mihomo/component/resolver"
 	"github.com/metacubex/mihomo/component/updater"
 	"github.com/metacubex/mihomo/config"
@@ -156,7 +157,7 @@ func updateListeners(cfg *config.Config) {
 	listener.ReCreateShadowSocks(general.ShadowSocksConfig, tunnel.Tunnel)
 	listener.ReCreateVmess(general.VmessConfig, tunnel.Tunnel)
 	listener.ReCreateTuic(general.TuicServer, tunnel.Tunnel)
-	if !features.Android {
+	if !features.Android && runtime.GOOS != "ios" {
 		listener.ReCreateTun(general.Tun, tunnel.Tunnel)
 	}
 }
@@ -369,6 +370,22 @@ func loadConfig(path string) (*config.Config, error) {
 	buf, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
+	}
+	if runtime.GOOS == "ios" {
+		raw, err := config.UnmarshalRawConfig(buf)
+		if err != nil {
+			return nil, err
+		}
+		raw.Tun.Enable = false
+		raw.DNS.Enable = true
+		raw.DNS.Listen = ""
+		raw.FindProcessMode = process.FindProcessOff
+		raw.Interface = ""
+		raw.ExternalController = ""
+		raw.ExternalControllerTLS = ""
+		raw.ExternalControllerUnix = ""
+		raw.ExternalControllerPipe = ""
+		return config.ParseRawConfig(raw)
 	}
 	return executor.ParseWithBytes(buf)
 }

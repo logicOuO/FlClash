@@ -11,6 +11,8 @@ import 'package:flutter/services.dart';
 
 abstract mixin class ServiceListener {
   void onServiceEvent(CoreEvent event) {}
+
+  void onServiceStatus(DateTime? startedAt) {}
 }
 
 class Service {
@@ -29,6 +31,15 @@ class Service {
     methodChannel = const MethodChannel('$packageName/service');
     methodChannel.setMethodCallHandler((call) async {
       switch (call.method) {
+        case 'statusChanged':
+          final milliseconds = call.arguments as int? ?? 0;
+          final startedAt = milliseconds == 0
+              ? null
+              : DateTime.fromMillisecondsSinceEpoch(milliseconds);
+          for (final listener in List.of(_listeners)) {
+            listener.onServiceStatus(startedAt);
+          }
+          break;
         case 'event':
           final data = call.arguments as String? ?? '';
           final methodCall = CoreMethodCall.fromJson(
@@ -111,4 +122,4 @@ class Service {
   }
 }
 
-Service? get service => system.isAndroid ? Service() : null;
+Service? get service => system.isMobile ? Service() : null;

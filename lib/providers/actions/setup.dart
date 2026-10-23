@@ -92,13 +92,18 @@ class SetupAction extends _$SetupAction {
     _startTime = await service?.getRunTime();
   }
 
+  void synchronizeServiceRuntime(DateTime? startedAt) {
+    _startTime = startedAt;
+    _setLocalRunning(startedAt != null);
+  }
+
   Future<void> initStatus() async {
     if (!globalState.needInitStatus) {
       commonPrint.log('init status cancel');
       return;
     }
     commonPrint.log('init status');
-    if (system.isAndroid) {
+    if (system.isMobile) {
       await _updateStartTime();
     }
     final shouldRun = _isRunning || ref.read(appSettingProvider).autoRun;
@@ -116,7 +121,7 @@ class SetupAction extends _$SetupAction {
 
     final request = _RunRequest(
       running: running,
-      initialize: running && initialize,
+      initialize: running && (initialize || system.isIOS),
       previousStartTime: _startTime,
     );
     _latestRunRequest = request;
@@ -479,10 +484,11 @@ class SetupAction extends _$SetupAction {
     if (!profileFailed && yamlMd5 == globalState.lastConfigMd5 && !force) {
       return _SetupTaskResult.completed;
     }
-    if (system.isAndroid) {
+    if (system.isMobile) {
       globalState.lastVpnState = ref.read(vpnStateProvider);
       final sharedState = ref.read(sharedStateProvider);
       await preferences.saveShareState(sharedState);
+      if (system.isIOS) await service?.syncState(sharedState);
     }
     // Recaptured so _start's catch can roll back after safeRun swallows it.
     (Object, StackTrace)? handoffFailure;

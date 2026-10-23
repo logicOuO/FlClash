@@ -2,7 +2,19 @@
 
 ## Core Integration
 
-The Go proxy core in `core/` operates in two modes.
+The Go proxy core in `core/` has desktop and Android modes, plus an iOS development port.
+
+iOS development port:
+
+- `ios/Runner/VPNService.swift` owns system VPN intents through `NETunnelProviderManager`.
+  `CoreLib` uses the native service channel on both mobile platforms. The iOS host
+  handles offline configuration; active RPC goes to the PacketTunnel extension.
+- The extension links an iOS Go archive, using `core/packetflow/` to connect the
+  public `NEPacketTunnelFlow` packet API to gVisor and mihomo. It never requests a
+  private utun descriptor. Shared App Group `home/` and `runtime/` have separate caches.
+- `ios/project.yml` generates the Xcode project. `tool/prepare_ios.sh` prepares it
+  on macOS; the ordinary setup hook deliberately skips iOS. See `ios/README.md`
+  for signing and the device acceptance work still required.
 
 Android lib mode:
 
@@ -394,9 +406,9 @@ Managers are nested `InheritedWidget`/`StatefulWidget` components built by `buil
 ```text
 AppEnvManager > StatusManager > ThemeManager
   > [Desktop: WindowManager > TrayManager > HotKeyManager > ProxyManager]
-    [Mobile:  AndroidManager > TileManager]
+    [Android: AndroidManager > TileManager] [iOS: IOSManager]
   > AppStateManager > CoreManager > ConnectivityManager
-  > [Desktop: WindowHeaderContainer] [Mobile: VpnManager]
+  > [Desktop: WindowHeaderContainer] [Android: VpnManager]
   > app content
 ```
 

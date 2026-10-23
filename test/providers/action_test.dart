@@ -460,6 +460,26 @@ void main() {
   });
 
   group('SetupAction', () {
+    test('native runtime updates never submit another listener intent', () {
+      final container = ProviderContainer(
+        overrides: [
+          commonActionProvider.overrideWith(_RaceCommonAction.new),
+          setupActionProvider.overrideWith(_RaceSetupAction.new),
+        ],
+      );
+      addTearDown(container.dispose);
+      final action =
+          container.read(setupActionProvider.notifier) as _RaceSetupAction;
+      action.synchronizeServiceRuntime(
+        DateTime.now().subtract(const Duration(seconds: 5)),
+      );
+      expect(container.read(runTimeProvider), greaterThanOrEqualTo(5000));
+      expect(action.transitions, isEmpty);
+      action.synchronizeServiceRuntime(null);
+      expect(container.read(runTimeProvider), isNull);
+      expect(action.transitions, isEmpty);
+    });
+
     group('rapid status changes', () {
       test('updates runtime and traffic while core start is pending', () async {
         final startCompleter = Completer<bool>();

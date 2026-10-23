@@ -16,7 +16,7 @@ class CoreController {
   late CoreHandlerInterface _interface;
 
   CoreController._internal() {
-    if (system.isAndroid) {
+    if (system.isMobile) {
       _interface = coreLib!;
     } else {
       _interface = coreService!;
@@ -113,6 +113,11 @@ class CoreController {
     required SetupParams params,
     Future<void> Function()? preloadInvoke,
   }) async {
+    if (system.isIOS) {
+      final result = await _interface.setupConfig(params);
+      if (result.isEmpty) await preloadInvoke?.call();
+      return result;
+    }
     if (preloadInvoke == null) {
       return _interface.setupConfig(params);
     }

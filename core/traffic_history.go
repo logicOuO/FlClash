@@ -69,6 +69,9 @@ var trafficHistory = func() *trafficHistoryCollector {
 }()
 
 func init() {
+	if runtime.GOOS == "ios" {
+		return
+	}
 	statistic.DefaultTrafficNotify = func(info *statistic.TrackerInfo, upload, download int64) {
 		trafficHistory.record(info, upload, download, time.Now())
 	}

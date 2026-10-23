@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:fl_clash/common/common.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -32,9 +33,7 @@ class AppPath {
 
   AppPath._internal() {
     appDirPath = join(dirname(Platform.resolvedExecutable));
-    supportDirectory().then((value) {
-      dataDir.complete(value);
-    });
+    dataDir.complete(_supportDirectory());
     temporaryDirectory().then((value) {
       tempDir.complete(value);
     });
@@ -46,6 +45,15 @@ class AppPath {
   factory AppPath() {
     _instance ??= AppPath._internal();
     return _instance!;
+  }
+
+  Future<Directory> _supportDirectory() async {
+    if (!Platform.isIOS) return supportDirectory();
+    final path = await const MethodChannel(
+      '$packageName/service',
+    ).invokeMethod<String>('homeDirectory');
+    if (path == null) throw StateError('iOS App Group is unavailable');
+    return Directory(path);
   }
 
   String get executableExtension {
