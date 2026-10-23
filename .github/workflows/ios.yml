@@ -12,6 +12,8 @@ jobs:
   unsigned-device:
     runs-on: macos-15-intel
     timeout-minutes: 60
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,6 +29,7 @@ jobs:
           cache-dependency-path: core/go.sum
       - name: Install native tools
         run: |
+          xcodebuild -version
           brew install xcodegen
           rustup show
         working-directory: plugins/rust_api/rust

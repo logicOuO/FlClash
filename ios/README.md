@@ -7,7 +7,7 @@ the public `NEPacketTunnelFlow` API. No private TUN file descriptor is used.
 
 ## Build on a Mac
 
-Install Xcode and its iOS SDK, Flutter 3.47.1, Go 1.26.4, rustup, CocoaPods and
+Install Xcode 26 or newer and its iOS SDK, Flutter 3.47.1, Go 1.26.4, rustup, CocoaPods and
 XcodeGen (`brew install xcodegen cocoapods`). Initialize the repository submodules.
 
 ```sh
